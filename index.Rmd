@@ -1,0 +1,73 @@
+---
+title: "GIS in Archaeology"
+author: "Martin Hinz"
+date: "HS 2020"
+institute: "Institut für Archäologische Wissenschaften, Universität Bern"
+output:
+  xaringan::moon_reader:
+    keep_md: true
+    chakra: libs/remark-latest.min.js
+    css: ["libs/default.css", "libs/default-fonts.css", "libs/customize.css"]
+    lib_dir: libs
+    seal: false
+    nature:
+      beforeInit: "libs/macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      fig_caption: yes
+---
+class: title-slide
+```{r, echo = FALSE}
+# https://stackoverflow.com/questions/25646333/code-chunk-font-size-in-rmarkdown-with-knitr-and-latex
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+```{r, echo = FALSE, results="asis"}
+cat('## ', rmarkdown::metadata$title)
+```
+.small[
+```{r, echo = FALSE, results="asis"}
+cat('#### ', rmarkdown::metadata$author)
+```
+
+```{r, echo = FALSE, results="asis"}
+cat(rmarkdown::metadata$institute)
+```
+
+```{r, echo = FALSE, results="asis"}
+cat(rmarkdown::metadata$date)
+```
+
+### Presentations
+
+- [01\. Session: Introduction](01/index.html) | 16/09/20
+- [02\. Session: Working with QGIS](02/index.html) | 23/09/20
+- [03\. Session: Making Maps](03/index.html) | 30/09/20
+- [04\. Session: Georeferencing](04/index.html) | 07/10/20
+- [05\. Session: Handling Spatial Data](05/index.html) | 14/10/20
+- [06\. Session: Densities](06/index.html) | 21/10/20
+- [07\. Session: Interpolation](07/index.html) | 28/10/20
+- [08\. Session: Making nicer Maps](08/index.html) | 04/11/20
+- [09\. Session: Terrain Data](09/index.html) | 11/11/20
+- [10\. Session: Site Catchment Analysis](10/index.html) | 18/11/20
+- [11\. Session: Visibility Analysis](11/index.html) | 25/11/20
+- [12\. Session: Least Cost Path Analysis](12/index.html) | 02/12/20
+- [13\. Session: Kriging](13/index.html) | 09/12/20
+- [14\. Session: Predictive Mapping](14/index.html) | 16/12/20
+]
+
+.tiny[
+**Data**
+The data base for the course will be provided.
+]
+
+.footnote[
+.small[
+<sup>\*</sup> You can find the **code of this presentations** at the [github repository](https://github.com/MartinHinz/gia_hs_2020). You might also like to check out the [**video tutorials** in english](https://tube.switch.ch/channels/503285f4) that will be made available.
+]
+]
