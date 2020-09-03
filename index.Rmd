@@ -45,8 +45,8 @@ cat(rmarkdown::metadata$date)
 
 ### Presentations
 
-- [01\. Session: Introduction](01/index.html) | 16/09/20
-- [02\. Session: Working with QGIS](02/index.html) | 23/09/20
+- [01\. Session: Introduction](01) | 16/09/20
+- [02\. Session: Working with QGIS](02) | 23/09/20
 - [03\. Session: Making Maps](03/index.html) | 30/09/20
 - [04\. Session: Georeferencing](04/index.html) | 07/10/20
 - [05\. Session: Handling Spatial Data](05/index.html) | 14/10/20
