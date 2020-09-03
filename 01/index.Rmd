@@ -339,6 +339,7 @@ class:center,middle
 #Let's Get Started
 1. [Click this link](data/points.zip) and download the file to your desktop
 2. Unzip the file
+3. [Click this link](data/background.tiff) and download the other file also to your desktop
 3. Open QGIS
 
 ![](images/qgis_launch.png)
