@@ -53,6 +53,366 @@ cat(rmarkdown::metadata$date)
 ## Content yet to come
 
 ---
+## aims and objectives
+
+### aim
+* Teach skills required for a complete GIS workflow
+  * from data acquisition to analysis and cartographic output
+
+### objectives
+* Introduction to GIS and fundamental cartography
+* Practical work with archaeological (spatial) data
+* Spatial analyses
+* Creation of "presentable" maps with different levels of information
+* Learning the basics for later autonomous work with GIS
+
+---
+## outcomes
+--
+
++ You will be familiar with the foundational concepts in spatial analysis and mapmaking
+--
+
++ You will understand the structure and purpose of GIS
+--
+
++ You will be practiced in applying spatial concepts to real-world problems
+--
+
++ You will be able to conduct spatial analyses
+--
+
++ You will produce decent maps
+
+---
+## schedule
+
+.smaller[
+| | |
+|-|-|
+| **16/09/20** | Introduction |
+| **23/09/20** | Working with QGIS |
+| **30/09/20** | Making Maps |
+| **07/10/20** | Georeferencing |
+| **14/10/20** | Handling Spatial Data |
+| **21/10/20** | Densities |
+| **28/10/20** | Interpolation |
+| **04/11/20** | Making nicer Maps |
+| **11/11/20** | Terrain Data |
+| **18/11/20** | Site Catchment Analysis |
+| **25/11/20** | Visibility Analysis |
+| **02/12/20** | Least Cost Path Analysis |
+| **09/12/20** | Kriging |
+| **16/12/20** | Predictive Mapping |
+]
+
+The programme may change or shift depending on how well we progress.
+---
+## organisational information
+
+* Assessment:
+  * active participation
+  * homework
+
+* You will need
+  * to take part regularily
+  * to make the homework
+  * some frustration threshold...
+
+If you do your homework at home, than you need a computer with QGIS:
+https://qgis.org/de/site/forusers/download.html
+
+Otherwise, Room -120 will be accessible for you, we need to give your credentials for the Hausdienst
+Please fill in the list ;-)
+
+All slides and additional (video) Material will be accessible via the course home page
+https://martinhinz.github.io/gia_hs_2020
+
+---
+class: inverse, middle, center
+# who are you?
+
+## Please give a short statement about
+
+**What is your name?**
+
+**What is your background in archaeology/computer/GIS?**
+
+**One thing you hope to get out of the course**
+
+*Describe a map you've seen/created/used recently and why it was interesting to you*
+
+*Do you have any advice how we make this a successful seminar?*
+
+---
+class:center,middle
+# Why Do We Create Maps?
+
+class:center,middle
+#Types of Maps
+
+---
+
+#General Reference Maps
+
+--
+
++ Show important physical features of an area
+--
+
++ Include natural and man-made features
+--
+
++ Usually meant to help aid in the navigation or discovery of locations
+--
+
++ Usually fairly simple
+--
+
++ Can be stylized based on the intended audience (tourists vs locals)
+
+---
+
+class:center,middle
+![img-center-90](images/schweiz_mobil.png)
+#####Source: https://map.schweizmobil.ch/
+---
+
+#Thematic Maps
+
+--
+
++ Focuses on a specific theme or subject area
+--
+
++ Features on the map represent the phenomenon being mapped
+--
+
++ Spatial features used for reference
+---
+class:center,middle
+![:width 75%](images/meteoSchweiz.png)
+
+#####Source: https://www.meteoschweiz.admin.ch/
+
+---
+class:center,middle
+## Choropleth
+
+![:width 60%](images/thematic_map_drawn.jpg)
+
+#####Source: Pinterest... 
+
+---
+class:center,middle
+## Choropleth
+
+![:width 60%](images/median_reineinkommen.gif)
+
+#####Source: http://www.estv2.admin.ch/
+
+---
+class:center,middle
+## Choropleth
+
+![:width 60%](images/inequality_schweiz.png)
+
+#####Source: https://www.srf.ch/news/schweiz/interaktive-karte-so-ungleich-ist-das-einkommen-in-der-schweiz-verteilt
+
+---
+class:center,middle
+
+#Area Cartogram – World Population
+![:width 100%](images/world-map.png)
+#####Source: http://www.visualcapitalist.com/
+
+---
+class:center,middle
+
+#Area Cartogram – European Unemployment rate
+![:width 70%](images/pi_12-2015_map1.jpg)
+#####Source: http://www.viewsoftheworld.net/
+
+---
+class:center,middle
+
+## Distribution Map
+![:width 33%](images/verbreitungskarte.jpg)
+
+.caption[Source: Steuer 1998]
+---
+class:center,middle
+## "Cultural" Map
+
+![:width 60%](images/199-0.jpg)
+.caption[Terberger et al. 2014]
+---
+class:center,middle
+## "Genetic" Map
+
+![img-full](images/Haplogroup-distribution.png)
+.caption[Kayser et al. 2005]
+---
+
+class:center,middle,inverse
+# Basic Map Elements
+
+---
+class:center,middle
+
+## Points  
+![:width 50%](images/point_feature.png)
+.caption[http://docs.qgis.org/2.8/en/docs/gentle_gis_introduction/vector_data.html#overview]
+
+---
+class:center,middle
+
+## Lines
+![:width 50%](images/polyline_feature.png)
+.caption[http://docs.qgis.org/2.8/en/docs/gentle_gis_introduction/vector_data.html#overview]
+
+---
+class:center,middle
+
+## Polygons
+![:width 50%](images/polygon_feature.png)
+.caption[http://docs.qgis.org/2.8/en/docs/gentle_gis_introduction/vector_data.html#overview]
+
+---
+
+class:center,middle
+# How do we make maps?
+
+---
+
+## Geographic Information System (GIS)
+.pull-left[
+
+> A geographic information system (GIS) is a system designed to capture, store, manipulate, analyze, manage, and present spatial or geographic data. - Wikipedia
+]
+
+.pull-right[
+![](images/8269791489_a6bbd062a9_o.jpg)
+]
+
+### Or more simply
+
+> In a GIS, you connect _**data**_ with _**geography**_.
+[GISgeography.com](http://gisgeography.com/what-gis-geographic-information-systems/)
+
+---
+
+## Geographic Information Systems (GIS)
+--
+
++ Create interactive queries (user-created searches)
+--
+
++ Analyze spatial information
+--
+
++ Edit data in maps
+--
+
++ Present the results of all these operations
+
+.right[
+![:width 60%](images/gis_overview.jpg)
+]
+---
+## QGIS
+
+- a free and open source GIS software
+- https://www.qgis.org/
+- You might like to installed it... ;-)
+
+.center[
+![:width 55%](images/QGIS_2.2_Valmiera_showing_new_menu_design.png)
+]
+
+.right[
+![:width 40%](images/QGIS_logo,_2017.svg.png)
+]
+---
+
+<!-- opening shapefile -->
+#Let's Get Started
+1. [Click this link](data/points.zip) and download the file to your desktop
+2. Unzip the file
+3. Open QGIS
+
+![](images/qgis_launch.png)
+
+---
+
+#QGIS Getting Started
+![:width 60%](images/qgis_nav1.png)
+
+---
+
+# QGIS Getting Started
+![:width 50%](images/qgis_nav2.png)
+
+---
+
+![:width 50%](images/qgis_nav3.png)
+
+![:width 50%](images/qgis_nav4.png)
+
+---
+
+# QGIS Getting Started
+![:width 90%](images/qgis_nav5.png)
+
+---
+<!-- Styling -->
+## Styling Features
++ Right-click the layer and select the Properties option
++ Select "Symbology," and style as you like
+        
+.pull-left[
+![:width 50%](images/styling1.png)
+]
+.pull-right[
+![:width 100%](images/styling1.1.png)
+]
+ 
+---
+## Add background
+.pull-left[
+![](images/background1.png)
+]
+.pull-right[
+![](images/background2.png)
+]
+
+---
+## Add background
+![](images/background3.png)
+---
+
+# Add labels to data
++ From Properties, select "Labels", "Show labels"
++ Select attribute for label (this time "label")
++ Style as you like
+
+.pull-left[
+![](images/label1.png)
+]
+.pull-right[
+![](images/label2.png)
+]
+
+---
+
+# Homework
++ Style the polygons however you'd like
++ Change the outline color or add a pattern
++ Style the labels
++ Change the font, the font size, or other attributes
++ Send me a screenshot
+
+---
 class: inverse, middle, center
 # Any questions?
 

@@ -36,12 +36,16 @@
   background-color: #555;
 }
 body{
-  font-family: 'Arial'
+  font-family: 'Arial';
 }
 
 h1, h2, h3, h4 {
     font-family: 'Arial';
     font-weight: normal;
+}
+
+.remark-slide-content {
+  font-size: 16pt;
 }
 
 .remark-slide-content h2 {
