@@ -48,7 +48,13 @@ cat('#### ', rmarkdown::metadata$institute)
 ```{r, echo = FALSE, results="asis"}
 cat(rmarkdown::metadata$date)
 ```
-
+.footnote[
+.right[
+.tiny[
+based on [Datapolitan-Training/qgis-training](https://github.com/Datapolitan-Training/qgis-training)
+]
+]
+]
 ---
 ## Content yet to come
 
