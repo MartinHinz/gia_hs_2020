@@ -50,11 +50,540 @@ cat(rmarkdown::metadata$date)
 ```
 
 ---
-## Content yet to come
+<!-- opening shapefile -->
+#Let's Get Started
+1. [Click this link](data/points.zip) and download the file to your desktop
+2. Unzip the file
+3. [Click this link](data/background.tiff) and download the other file also to your desktop
+3. Open QGIS
+
+![](images/qgis_launch.png)
+
+---
+## Layers
+
+![img-full](images/map1.png)
+#### Image Source: http://www.geocontrolling.com/co-je-gis.htm
+
+---
+        
+# Layer Ordering
+--
+
++ Layers on top are drawn on top
+--
+
++ Just drag and drop within the Layers Panel to change order
+--
+
++ Try it now
+---
+## Shapefiles
+--
+        
++ Basic file for storing map elements
+--
+
++ Stores spatial data, like points, lines, and polygons
+--
+
++ Multiple files comprise a "shapefile"
+
+--
+
+![img-center-80](images/file_struct1.png)
+
+---
+
+## Shapefiles
+
+![img-center-80](images/file_struct1.png)
+--
+
++ .shp—The main file that stores the feature geometry
+--
+
++ .dbf—The dBASE table that stores the attribute information of features
+
+---
+
+## Shapefiles
+
+![img-center-80](images/file_struct1.png)
+
++ .prj—The file that stores the coordinate system information
+--
+
++ .shx—The index file that stores the index of the feature geometry
+
+---
+
+## You might also see
+--
+
++ .cpg—Identifies the character set to be used
+--
+
++ .sbn and .sbx—The files that store the spatial index of the features
+
+---
+
+## Shapefiles
+
++ Have a few limitations
+--
+
++ One geometry type (Point, Line, Polygon) per shapefile
+--
+
++ So sometimes you end up with this:
+![img](images/file_struct2.png)
+
+---
+
+## Attribute Table (Right click on layer)
+![:width 90%](images/open_attribute_table.png)
+---
+
+## Attribute Table
+
+.pull-left[
+### Table View 
+![img](images/attribute_table_tableview.png)
+]
+
+.pull-right[
+### Form View
+![img](images/attribute_table_formview.png)
+]
+
+---
+## Shapefiles and Attribute Tables
+--
+
++ Column names can only be letters, numbers, and underscores "_"
+--
+
++ Column names can only be ten characters long
+
+--
+
+![:width 70%](images/attribute_table_tableview.png)
+---
+
+class:center,middle
+# Let's add another layer
+
+---
+
+## Going out in Bern
++ [Download the data](data/going_out_in_bern.zip) to your desktop
++ Unzip the file
++ Open in QGIS
+
+![:width 70%](images/going_out_in_bern_1.png)
+---
+
+## Going out in Bern
+
+![:width 90%](images/going_out_in_bern_2.png)
+
+---
+
+# Filter and Query
++ We can filter the points based on the values in the attribute table
+
+---
+        
+# Filter and Query
++ Right-click on the layer and select "Filter" to open the Query Builder
+
+![:width 75%](images/filter1.png)
+
+
+---
+
+# Filter and Query
+![:width 75%](images/filter2.png)
+
+---
+
+# Filter and Query
+![:width 50%](images/filter3.png)
+--
+![:width 50%](images/filter4.png)
+
+---
+
+# Filter and Query
+![:width 75%](images/filter5.png)
+
+---
+
+# Filter and Query
+![:width 75%](images/filter6.png)
+
+---
+
+class:center,middle
+# We can also filter by multiple conditions
+
+---
+
+# Filter and Query - Multiple Conditions
+![:width 50%](images/filter7.png)
+--
+![:width 50%](images/filter8.png)
+
+---
+
+# Filter and Query - Multiple Conditions
+![:width 75%](images/filter9.png)
+
+---
+
+# Zoom to Layer
+![:width 50%](images/zoom_to_layer1.png)
+--
+![:width 50%](images/zoom_to_layer2.png)
+
+---
+
+# Zoom Selection
+--
+
++ Select the zoom on the toolbar
+
+
+![img-right-30](images/zoom_box.png)
+--
+
++ Draw a box around the area you want to zoom into
+--
+
++ Click the icon to return to the previous map extent
+
+![img-right-30](images/extent_box.png)
+
+---
+
+# Pan Map
++ Select the hand tool to pan around the map
+
+![img-center-30](images/hand.png)
+
+---
+# Exporting Data
+![:width 50%](images/export1.png)
+--
+![:width 50%](images/export2.png)
+---
+
+# Your Turn
++ Filter according to your own criteria
++ Try and find something interesting
++ Change the style of the point, either to a different shape, color, or icon
++ Export your selection as a new shapefile
+    
+
+---
+## CSV-Files
++ General (textbased) spreadsheat format
+
+--
+
++ simple and robust
+
+--
+
++ human readable (kind of)
+
+--
+![:width 100%](images/csv1.png)
+
+---
+## CSV-Files
+
++ Perfect for data exchange between Spreadsheet (Excel) and GIS
+
+![:width 50%](images/csv1.png)![:width 50%](images/csv2.png)
+
+---
+## CSV Import - Bicycle Rental
++ [Download the data](data/bicycle_rent.csv) to your desktop
+
+![:width 50%](images/csv1.png)![:width 50%](images/csv2.png)
+
+---
+
+## CSV Import - Bicycle Rental
+
+Load Text Layer
+
+![:width 75%](images/csv_import1.png)
+---
+## CSV Import - Bicycle Rental
+
+Set coordinate columns
+
+![:width 50%](images/csv_import2.png)
+---
+## CSV Import - Bicycle Rental
+
+Set coordinate columns
+
+and Coordinate Reference System <- We will explain this in a bit!
+
+You can also access more detailed Coordinate Reference settings.
+
+![:width 50%](images/csv_import3.png)![:width 50%](images/csv_import4.png)
+
+---
+
+class:center,middle
+# So what is a Coordinate Reference System?
+
+---
+
+# Projections
+--
+
++ No one's favorite part of GIS
+--
+
++ But a necessary part of it nonetheless
+--
+
++ Convert points on the 3-dimensional Earth (**latitude** and **longitude**) to x and y coordinates on a 2-dimensional map
+
+--
+
+![img-center-85](images/projections-orange.jpg)
+
+[Digital Coast Geozone](https://geozoneblog.wordpress.com/2012/05/22/happy-birthday-mercator/)
+
+---
+
+# Projections
++ Every projection distorts some part of your map
+
+![:width 40%](images/projections-faces.png)
+
+[FlowingData](http://flowingdata.com/2014/01/13/map-projections-illustrated-with-a-face/)
+
+---
+
+# Mercator Projections
+--
+
++ A common map projection
+--
+
++ Makes geometries near poles look bigger than geometries near the equator
+--
+
+![:width 40%](images/mercator.gif)
+
+---
+
+# Projections Matter
+--
+
++ These circles are all the same size on the globe:
+
+![:width 45%](images/projections-tissot-mercator.png)
+[Progonos](http://www.progonos.com/furuti/MapProj/Normal/CartProp/Distort/distort.html)
+
+---
+
+# Projections Matter
++ As are these:
+
+![img-center-60](images/projections-tissot-mollweide.png)
+[Progonos](http://www.progonos.com/furuti/MapProj/Normal/CartProp/Distort/distort.html)
+
+---
+
+# Projections Matter
++ And these:
+
+![:width 45%](images/projections-tissot-oblique-mercator.png)
+[Progonos](http://www.progonos.com/furuti/MapProj/Normal/CartProp/Distort/distort.html)
+
+---
+
+# Projections Matter
+![:width 80%](images/projections.png)
+
+---
+
+# Projections
+
++ For the most part we will work in **WGS 84** (latitude and longitude)
+--
+
++ In Switzerland, we use a more accurate projection **CHTRS95: Swiss Terrestrial Reference System 1995** that is identical with the european system **ETRS89**.
+
++ You might also find 'Schweizer Landeskoordinaten' (CH1903) or Landesvermessung 1903 (LV03)
+
+![:width 40%](images/image.STP_BezugsrahmenLV95.png)
+###### Source: https://www.swisstopo.admin.ch/de/wissen-fakten/geodaesie-vermessung/bezugsrahmen/lokal/lv95.html
+---
+
+# Projections
++ Identified by unique IDs (**EPSG**) that make it easier to talk about them
+
++ EPSG: European Petroleum Survey Group Geodesy (it was introduced, because Oil companies were annoyed by the incredible number of different systems)
+
+--
++ WGS 84 is referred to as **EPSG:4326**
+
+--
++ Google Maps and other online sources often uses WGS 84 / Pseudo-Mercator (**EPSG:3857**)
+
+--
++ CHTRS95 is referred to as **EPSG:2056**
+
+--
+
+## Remember these three and you should be set
+
+---
+
+class:center,middle
+# Back to Adding CSV Data
+
+---
+
+# Adding CSV Data
+![:width 40%](images/add_csv6_box.png)
+
+---
+
+## CSV Import - Bicycle Rental
+
+Bicycles added.
+
+![:width 75%](images/csv_import5.png)
+
+
+---
+
+# Selecting Points
+![img-center-70](images/select1.png)
+
+---
+
+# Selecting Points
+![img-center-40](images/select2.png)
+
+--
++ Click the point
+![img-center-40](images/select3.png)
+
+---
+
+# Selecting Points
+![:width 20%](images/select4.png)
+
+![:width 70%](images/select5.png)
+
+---
+
+# Selecting Points - Attribute Table
+![:width 50%](images/select6.png)![:width 50%](images/select7.png)
+
+---
+# Selecting Points - Saving Selection
+
+![img-right-65](images/select8.png)
+
+---
+
+# Selecting Points - Saving Selection
+
++ If we wanted to reproject the data into a different CRS, we could do that here
+
+--
+
+![:width 50%](images/select9.png)
+--
+
++ Pick the new projection in the CRS field (like when we imported the CSV)
+
+---
+
+## Installing Plugins
++ QGIS has many third party functionality available
++ We will use some of them in the course
++ let's get some Background with QuickMapServices
+
+![:width 50%](images/install_plugin1.png)![:width 50%](images/install_plugin2.png)
+
+---
+## Basemaps (QuickMapServices)
+
++ Satellite imagery
++ Map services
++ ...
++ Fast and easy way to get background maps
+
+![:width 50%](images/install_plugin4.png)![:width 50%](images/install_plugin5.png)
+
+
+---
+
+# Setting Up QuickMapServices Plugin
++ Go to the Settings Menu
+![:width 50%](images/basemap4.png)
+
+---
+
+# Setting Up QuickMapServices Plugin
++ Get the contributed packs
+
+![:width 50%](images/basemap5_box.png)
+
+---
+
+# Setting Up QuickMapServices Plugin
++ Revel in all the beautiful base maps
+.right[
+![:width 22%](images/basemap6.png)
+]
+---
+
+# What We've Covered
+--
+
++ Adding, styling, and labeling data in QGIS
+--
+
++ Projections
+--
+
++ Selecting features
+--
+
++ Exporting data
+
+---
+
+# Homework
++ Filter for service requests in your borough
++ Try and find something interesting
++ Change the style of the point, either to a different shape, color, or icon
++ Export your selection as a new shapefile
++ Get a background map
++ Send me a screenshot
 
 ---
 class: inverse, middle, center
 # Any questions?
+
+![:width 20%](images/agony_island.png)
+
+.caption[Source: https://www.instagram.com/sadtopographies]
 
 .footnote[
 .right[
