@@ -148,6 +148,7 @@ class: inverse, middle, center
 class:center,middle
 # Why Do We Create Maps?
 
+---
 class:center,middle
 #Types of Maps
 
@@ -405,6 +406,18 @@ class:center,middle
 ]
 
 ---
+# What We've Covered
+--
+
++ What is GIS
+--
+
++ Basic GIS concepts and tools
+--
+
++ Adding, styling, and labeling data in QGIS
+
+---
 
 # Homework
 + Style the polygons however you'd like
@@ -416,6 +429,10 @@ class:center,middle
 ---
 class: inverse, middle, center
 # Any questions?
+
+![:width 20%](images/disappointment_cove.png)
+
+.caption[Source: https://www.instagram.com/sadtopographies]
 
 .footnote[
 .right[
