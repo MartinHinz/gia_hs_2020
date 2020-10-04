@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>GIS in Archaeology</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Hinz" />
+    <meta name="date" content="2020-07-10" />
+    <script src="libs/header-attrs-2.3/header-attrs.js"></script>
+    <link rel="stylesheet" href="../libs/default.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/default-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/customize.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide, center, middle
+
+
+#  GIS in Archaeology
+
+##  04 - Georeferencing
+
+###  Martin Hinz
+
+####  Institut für Archäologische Wissenschaften, Universität Bern
+
+07/10/20
+
+.footnote[
+.right[
+.tiny[
+You can download a [pdf of this presentation](gis_in_archaeology_04.pdf).
+]
+]
+]
+
+---
+## Why georeferencing information is necessary?
+
++ Many spatial informations are already available in digital form
+
+--
+
++ Archaeology often deals with legacy data (before the 1990s)
+
+--
+
++ Vital information about site distribution or excavations are available only as printed maps ins books
+
+--
+
++ Even for later publications, most of the time no digital data are available
+
+--
+
++ For reevaluation, analysis or combining with other information, it is necessary to bring them to a GIS
+
+---
+## Things to consider
+
++ Every map comes with its own projection. Sometimes known, more often not
+
+--
+
++ Every mapping results in errors or imprecision. Every digitalisation adds errors up to that.
+
+--
+
++ Scale matters: digitised information on large scale might be precise enough, on small scale not. It is necessary to keep meta-data to know how the data were digitised (on what scale) to be able to understand on what scale they might be used.
+
+---
+## Things we will do today
+
++ Georeference a map
+
+--
+
++ Digitise the information on a map
+
+---
+## Georeference a map
+
+We use the example of the Early Bronze Age burial ground of Miskovice in the Czech Republic. General location:
+
+50°09'26.0"N 14°32'30.0"E (Degree, Minutes, Seconds)
+
+50.157222, 14.541667 (Decimal Degree)
+
+https://goo.gl/maps/ZRNGjJZVchzGwbHS6
+
+---
+## How the spatial information come in the publication
+
++ an overview map + more detailed map of the burials
++ no information on CRS are available
++ no reference coordinates are given
+
+![:width 45%](data/miskovice_overview.png)
+![:width 45%](data/miskovice_a-d.png)
+---
+## Let's Get Started
+
+1. [Click this link](data/miskovice_overview.png) and download the 'Overview' map
+2. [Click this link](data/miskovice_a-d.png) and download the detailed map
+3. Open QGIS
+4. Start a new project
+5. Add a background layer with 'manmade features', eg. positron
+
+---
+## Locate the general area
+
+North-West of Prag
+
++ 50.157222, 14.541667 (Decimal Degree) EPSG 4326
++ 1618620.5, 6472956.1 (EPSG 3857)
+
+**Check your Project CRS!**
+
+Use EPSG 3857, as this is the native projection for our background reference map (Positron).
+
+![:width 48%](images/positron_in_3857.png)
+![:width 48%](images/positron_in_4326.png)
+---
+## Locate the specific mapped area
+
++ compare the overview map with the background reference map
+
+![:width 48%](images/georeferencing00.png)
+![:width 48%](images/georeferencing01.png)
+---
+## Start georeferencing
+
++ Open the Georeferencing Tool
++ In there, Open the raster image
+
+![:width 32%](images/georeferencing02.png)
+![:width 32%](images/georeferencing03.png)
+![:width 32%](images/georeferencing04.png)
+
+---
+## Identify and mark congruent points
+
++ Click on 'Add Point' in the Georeferencing tool
++ Identify in both maps points that represent the same feature
++ Click on that point in the raster image
++ In the dialog, either add known coordinates, or click on 'From map view'
++ Click in 'map view' on the corresponding point
++ Click on 'OK'
++ Repeat, until you have at least 5 points
++ **Try to spread the points over the whole image!**
+
+![:width 32%](images/georeferencing05.png)
+![:width 32%](images/georeferencing06.png)
+![:width 32%](images/georeferencing07.png)
+---
+## Start the transformation (1)
+
+.pull-left[
++ Click on 'Transfomation Settings' (the cogwheel icon)
++ Transformation types:
+  + The *Linear algorithm* does not actually transform the raster. This algorithm likely won’t be sufficient if you are dealing with scanned material.
+  + The *Helmert transformation* performs simple scaling and rotation transformations.
+  + The *Polynomial algorithms 1-3* are among the most widely used algorithms.
+  + The *Thin Plate Spline (TPS) algorithm* is useful when very low quality originals are being georeferenced.
+  + The *Projective transformation* is a linear rotation and translation of coordinates.
+]
+.pull-right[
+![:width 100%](images/georeferencing08.png)
+
+**We use either Thin Plate Spline or Polynomial 3.**
+
+]
+---
+## Start the transformation (2)
+
++ Define the Target CSR matching our input CSR (EPSG 3857).
++ Select the output raster file to create
++ Select 'Add to QGIS when ready'
++ Click on 'OK'
++ Test different Transformation algorithms
+
+![:width 48%](images/georeferencing08.png)
+![:width 48%](images/georeferencing09.png)
+---
+## Georeferencing the detailed map
+
++ Your turn:
+  + Open the detailed map in the georeferencing tool
+  + Georeference it based on the already georeferenced overview map
+  + *Tip:* You can use the corners of the map...
+
+![:width 48%](images/georeferencing10.png)
+![:width 48%](images/georeferencing11.png)
+---
+## Result
+
+.pull-left[
++ Now you should have the maps georeferenced, i.e. their orientation and extend are aligned with the reference map.
++ You can activate and deactivate the layer to compare
++ Every pixel in the map should be placed in space as best as possible
++ You can start digitising features of the map into spatial data (eg. as shapefile)
+]
+
+.pull-right[
+![:width 100%](images/georeferencing12.png)
+]
+---
+## Digitising Points
+
+Now we can start recording the position of map features as spatial data. Remember the types of vector data:
+
++ Point
++ Line
++ Polygon
+
+At first, we digitise the burials as points. To do so, we add a new Shapefile layer.
+
+---
+## Adding a point layer
+
++ Click on 'Layer &gt; Create Layer &gt; New Shapefile Layer'
++ As geometry type, you can select 'Point'
++ Select the storage location and name of your new layer
++ You can add more fields (of different data tye) to the shapefile layer as needed.
++ (We stick to the ID field as only field for now)
++ Click on 'OK'.
+
+![:width 32%](images/digitising_points01.png)
+![:width 32%](images/digitising_points02.png)
+![:width 32%](images/digitising_points07.png)
+---
+## Adding point features to a shapefile layer (1)
+
++ First, enable Editing Mode
++ Than, select 'Add Point Object'
+
+![:width 48%](images/digitising_points03.png)
+![:width 48%](images/digitising_points04.png)
+---
+## Adding point features to a shapefile layer (2)
+
++ Click in the center of a burial
++ In the dialog, add the burial number as id
++ Repeat for all burials...
++ Click on 'Save Changes' and on 'Switch Edit Mode' to store your changes in the file.
+
+![:width 48%](images/digitising_points05.png)
+![:width 48%](images/digitising_points06.png)
+---
+## Adding polygon features to a shapefile layer (1)
+
++ If you need to record the extend of objects, you might like to consider digitising them as polygon
++ Add new layer, select 'Polygon' as Geometry type
++ Add fields as needed, select storage location, mark name with '_polyon' or similar to know later the geometry type of that layer.
+
+![:width 48%](images/digitising_polygon01.png)
+![:width 48%](images/digitising_polygon02.png)
+---
+## Adding polygon features to a shapefile layer (2)
+
++ First, enable Editing Mode
++ Than, select 'Add Polygon Object'
++ Left click on a point of the burial border
++ Add more nodes of the polygon by left clicking on further points of the burial border
++ Right click to finish adding points
+
+![:width 48%](images/digitising_polygon03.png)
+![:width 48%](images/digitising_polygon04.png)
+---
+## Adding polygon features to a shapefile layer (3)
+
++ Repeat for all burials
++ Click on 'Save changes' and 'Switch Edit Mode'
++ Your new layer contains now the spatial information for all burials
+
+![:width 32%](images/digitising_polygon05.png)
+![:width 32%](images/digitising_polygon06.png)
+![:width 32%](images/digitising_polygon07.png)
+---
+## Inspect the final result
+
++ You now can deactivate the georeferenced map to inspect the result on the background reference map
++ You can also turn on labeling to see the burial numbers
++ Now, you will have many different files in your output folder...
+
+![:width 32%](images/digitising_polygon08.png)
+![:width 32%](images/digitising_polygon09.png)
+![:width 32%](images/digitising_polygon10.png)
+
+---
+## Finally
+
++ Now you can use your data for mapping and for further analysis
++ Keep in Mind:
+  + Every mapping results in errors or imprecision. Every digitalisation adds errors up to that.
+  + Scale matters: digitised information on large scale might be precise enough, on small scale not. It is necessary to keep meta-data to know how the data were digitised (on what scale) to be able to understand on what scale they might be used.
+  + **Be as accurate as possible and neccesary**
+
+### Homework
++ Select an arbitrary map from archaeological literature (individual burial ground to europe wide mapping).
++ Digitise the information (point or polygon)
++ Send me the resulting shapefile and the (georeferenced) original map.
+
+---
+
+class: inverse, middle, center
+# Any questions?
+
+![:width 20%](images/unfortunate_cove.png)
+
+.caption[Source: https://www.instagram.com/sadtopographies]
+
+.footnote[
+.right[
+.tiny[
+You might find the course material (including the presentations) at
+
+https://github.com/MartinHinz/gia_hs_2020
+
+You can see the rendered presentations at
+
+http://martinhinz.github.io/gia_hs_2020
+
+You can contact me at
+
+&lt;a href="mailto:martin.hinz@iaw.unibe.ch"&gt;martin.hinz@iaw.unibe.ch&lt;/a&gt;
+]
+]
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../libs/remark-latest.min.js"></script>
+<script src="../libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"fig_caption": true,
+"ratio": "16:10"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

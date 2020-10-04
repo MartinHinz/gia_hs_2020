@@ -49,12 +49,289 @@ cat('#### ', rmarkdown::metadata$institute)
 cat(rmarkdown::metadata$date)
 ```
 
----
-## Content yet to come
+.footnote[
+.right[
+.tiny[
+You can download a [pdf of this presentation](gis_in_archaeology_04.pdf).
+]
+]
+]
 
 ---
+## Why georeferencing information is necessary?
+
++ Many spatial informations are already available in digital form
+
+--
+
++ Archaeology often deals with legacy data (before the 1990s)
+
+--
+
++ Vital information about site distribution or excavations are available only as printed maps ins books
+
+--
+
++ Even for later publications, most of the time no digital data are available
+
+--
+
++ For reevaluation, analysis or combining with other information, it is necessary to bring them to a GIS
+
+---
+## Things to consider
+
++ Every map comes with its own projection. Sometimes known, more often not
+
+--
+
++ Every mapping results in errors or imprecision. Every digitalisation adds errors up to that.
+
+--
+
++ Scale matters: digitised information on large scale might be precise enough, on small scale not. It is necessary to keep meta-data to know how the data were digitised (on what scale) to be able to understand on what scale they might be used.
+
+---
+## Things we will do today
+
++ Georeference a map
+
+--
+
++ Digitise the information on a map
+
+---
+## Georeference a map
+
+We use the example of the Early Bronze Age burial ground of Miskovice in the Czech Republic. General location:
+
+50°09'26.0"N 14°32'30.0"E (Degree, Minutes, Seconds)
+
+50.157222, 14.541667 (Decimal Degree)
+
+https://goo.gl/maps/ZRNGjJZVchzGwbHS6
+
+---
+## How the spatial information come in the publication
+
++ an overview map + more detailed map of the burials
++ no information on CRS are available
++ no reference coordinates are given
+
+![:width 45%](data/miskovice_overview.png)
+![:width 45%](data/miskovice_a-d.png)
+---
+## Let's Get Started
+
+1. [Click this link](data/miskovice_overview.png) and download the 'Overview' map
+2. [Click this link](data/miskovice_a-d.png) and download the detailed map
+3. Open QGIS
+4. Start a new project
+5. Add a background layer with 'manmade features', eg. positron
+
+---
+## Locate the general area
+
+North-West of Prag
+
++ 50.157222, 14.541667 (Decimal Degree) EPSG 4326
++ 1618620.5, 6472956.1 (EPSG 3857)
+
+**Check your Project CRS!**
+
+Use EPSG 3857, as this is the native projection for our background reference map (Positron).
+
+![:width 48%](images/positron_in_3857.png)
+![:width 48%](images/positron_in_4326.png)
+---
+## Locate the specific mapped area
+
++ compare the overview map with the background reference map
+
+![:width 48%](images/georeferencing00.png)
+![:width 48%](images/georeferencing01.png)
+---
+## Start georeferencing
+
++ Open the Georeferencing Tool
++ In there, Open the raster image
+
+![:width 32%](images/georeferencing02.png)
+![:width 32%](images/georeferencing03.png)
+![:width 32%](images/georeferencing04.png)
+
+---
+## Identify and mark congruent points
+
++ Click on 'Add Point' in the Georeferencing tool
++ Identify in both maps points that represent the same feature
++ Click on that point in the raster image
++ In the dialog, either add known coordinates, or click on 'From map view'
++ Click in 'map view' on the corresponding point
++ Click on 'OK'
++ Repeat, until you have at least 5 points
++ **Try to spread the points over the whole image!**
+
+![:width 32%](images/georeferencing05.png)
+![:width 32%](images/georeferencing06.png)
+![:width 32%](images/georeferencing07.png)
+---
+## Start the transformation (1)
+
+.pull-left[
++ Click on 'Transfomation Settings' (the cogwheel icon)
++ Transformation types:
+  + The *Linear algorithm* does not actually transform the raster. This algorithm likely won’t be sufficient if you are dealing with scanned material.
+  + The *Helmert transformation* performs simple scaling and rotation transformations.
+  + The *Polynomial algorithms 1-3* are among the most widely used algorithms.
+  + The *Thin Plate Spline (TPS) algorithm* is useful when very low quality originals are being georeferenced.
+  + The *Projective transformation* is a linear rotation and translation of coordinates.
+]
+.pull-right[
+![:width 100%](images/georeferencing08.png)
+
+**We use either Thin Plate Spline or Polynomial 3.**
+
+]
+---
+## Start the transformation (2)
+
++ Define the Target CSR matching our input CSR (EPSG 3857).
++ Select the output raster file to create
++ Select 'Add to QGIS when ready'
++ Click on 'OK'
++ Test different Transformation algorithms
+
+![:width 48%](images/georeferencing08.png)
+![:width 48%](images/georeferencing09.png)
+---
+## Georeferencing the detailed map
+
++ Your turn:
+  + Open the detailed map in the georeferencing tool
+  + Georeference it based on the already georeferenced overview map
+  + *Tip:* You can use the corners of the map...
+
+![:width 48%](images/georeferencing10.png)
+![:width 48%](images/georeferencing11.png)
+---
+## Result
+
+.pull-left[
++ Now you should have the maps georeferenced, i.e. their orientation and extend are aligned with the reference map.
++ You can activate and deactivate the layer to compare
++ Every pixel in the map should be placed in space as best as possible
++ You can start digitising features of the map into spatial data (eg. as shapefile)
+]
+
+.pull-right[
+![:width 100%](images/georeferencing12.png)
+]
+---
+## Digitising Points
+
+Now we can start recording the position of map features as spatial data. Remember the types of vector data:
+
++ Point
++ Line
++ Polygon
+
+At first, we digitise the burials as points. To do so, we add a new Shapefile layer.
+
+---
+## Adding a point layer
+
++ Click on 'Layer > Create Layer > New Shapefile Layer'
++ As geometry type, you can select 'Point'
++ Select the storage location and name of your new layer
++ You can add more fields (of different data tye) to the shapefile layer as needed.
++ (We stick to the ID field as only field for now)
++ Click on 'OK'.
+
+![:width 32%](images/digitising_points01.png)
+![:width 32%](images/digitising_points02.png)
+![:width 32%](images/digitising_points07.png)
+---
+## Adding point features to a shapefile layer (1)
+
++ First, enable Editing Mode
++ Than, select 'Add Point Object'
+
+![:width 48%](images/digitising_points03.png)
+![:width 48%](images/digitising_points04.png)
+---
+## Adding point features to a shapefile layer (2)
+
++ Click in the center of a burial
++ In the dialog, add the burial number as id
++ Repeat for all burials...
++ Click on 'Save Changes' and on 'Switch Edit Mode' to store your changes in the file.
+
+![:width 48%](images/digitising_points05.png)
+![:width 48%](images/digitising_points06.png)
+---
+## Adding polygon features to a shapefile layer (1)
+
++ If you need to record the extend of objects, you might like to consider digitising them as polygon
++ Add new layer, select 'Polygon' as Geometry type
++ Add fields as needed, select storage location, mark name with '_polyon' or similar to know later the geometry type of that layer.
+
+![:width 48%](images/digitising_polygon01.png)
+![:width 48%](images/digitising_polygon02.png)
+---
+## Adding polygon features to a shapefile layer (2)
+
++ First, enable Editing Mode
++ Than, select 'Add Polygon Object'
++ Left click on a point of the burial border
++ Add more nodes of the polygon by left clicking on further points of the burial border
++ Right click to finish adding points
+
+![:width 48%](images/digitising_polygon03.png)
+![:width 48%](images/digitising_polygon04.png)
+---
+## Adding polygon features to a shapefile layer (3)
+
++ Repeat for all burials
++ Click on 'Save changes' and 'Switch Edit Mode'
++ Your new layer contains now the spatial information for all burials
+
+![:width 32%](images/digitising_polygon05.png)
+![:width 32%](images/digitising_polygon06.png)
+![:width 32%](images/digitising_polygon07.png)
+---
+## Inspect the final result
+
++ You now can deactivate the georeferenced map to inspect the result on the background reference map
++ You can also turn on labeling to see the burial numbers
++ Now, you will have many different files in your output folder...
+
+![:width 32%](images/digitising_polygon08.png)
+![:width 32%](images/digitising_polygon09.png)
+![:width 32%](images/digitising_polygon10.png)
+
+---
+## Finally
+
++ Now you can use your data for mapping and for further analysis
++ Keep in Mind:
+  + Every mapping results in errors or imprecision. Every digitalisation adds errors up to that.
+  + Scale matters: digitised information on large scale might be precise enough, on small scale not. It is necessary to keep meta-data to know how the data were digitised (on what scale) to be able to understand on what scale they might be used.
+  + **Be as accurate as possible and neccesary**
+
+### Homework
++ Select an arbitrary map from archaeological literature (individual burial ground to europe wide mapping).
++ Digitise the information (point or polygon)
++ Send me the resulting shapefile and the (georeferenced) original map.
+
+---
+
 class: inverse, middle, center
 # Any questions?
+
+![:width 20%](images/unfortunate_cove.png)
+
+.caption[Source: https://www.instagram.com/sadtopographies]
 
 .footnote[
 .right[
