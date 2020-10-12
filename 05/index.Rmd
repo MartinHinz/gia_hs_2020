@@ -52,6 +52,39 @@ cat(rmarkdown::metadata$date)
 ---
 ## Content yet to come
 
+Daten:
+14C Daten für die Schweiz (Point)
+Kantone (Polygon), Heruntergeladen
+Oberflächengewässer (Polygon), Heruntergeladen
+Gesamtausdehung_schweiz, Heruntergeladen
+
+
+Union
+
+Temporäre Layer
+
+Dissolve
+
+Vertex Tool
+
+Reprojection https://training.datapolitan.com/qgis-training/Intermediate_GIS/#218
+Auf Schweizer CH1903 umprojizieren
+
+Toolbox
+
+Extract by Location
+14C Daten für die Schweiz ausschneiden
+
+Spatial Query
+Wieviele Fundstellen liegen in Gewässern?
+Count Points in Polygon
+
+Buffer https://training.datapolitan.com/qgis-training/Intermediate_GIS/#203
+Wieviele Fundstellen liegen in 1km um Gewässer
+
+Spatial Join https://training.datapolitan.com/qgis-training/Intermediate_GIS/#170
+Durchschittlicher BP Wert der 14C Daten pro Kanton
+
 ---
 class: inverse, middle, center
 # Any questions?
