@@ -213,17 +213,206 @@ The resulting raster is equivalent to the Thiessen Polygon Solution... only as r
 ---
 ## TIN (Triangulated Irregular Network)
 
+- Another interpolation technique placing more focus on dynamics between the actual points
+- the surface is divided in triangles, where the data points are the corners
+- these triangles are placed in 3d (x,y and the interpolated value as z) and rastered
+
+![:width 38%](images/L05_fig23.gif) ![:width 58%](images/unnamed.gif)
+.caption[Source: https://courseware.e-education.psu.edu; http://sar.kangwon.ac.kr/]
+---
+## TIN Benefits / Disadvantages
+
+- more dynamic interpolation than simple gridding or Nearest Neighbor
+- interactions/differences between data points are better interpolated
+- very good for interpolating rather regular elevation measurements
+
+### but
+
+- highly irregulare point patterns can result in 'strange' networks
+
+![:width 48%](images/gc082_1.gif) ![:width 48%](images/4-Figure4-1.png)
+.caption[Source: http://www.geocomputation.org; Bhargava et al. 2013]
+
+---
+## TIN in QGIS
+
+.pull-left[
+1. In the toolbox ![](images/toolbox_icon.png), search for 'tin'
+2. Select 'TIN Interpolation'
+3. Select the input layer
+4. Select CALBP as interpolation attribute
+5. Click on the '+' icon
+6. Select the extend to be calculated from the layer extend
+7. Specify the resolution either in width or in height
+8. (if you want to see the network itself, select eg. Temporary Layer from the Triangulation)
+9. Click on 'Run'
+]
+
+.pull-right[
+![:width 90%](images/tin01.png) ![:width 90%](images/tin02.png)
+]
+
+---
+## TIN result
+
+- As a result, you should see grayish triangles
+- After selecting pseudocolor, the expansion of the neolithic is again nicely visible
+- if you selected the output of the Triangulation, you can overlay this (right picture)
+
+![:width 48%](images/tin03.png) ![:width 48%](images/tin04.png)
+
 ---
 ## Inverse Distance Weighted (IDW)
 
+- archaeological data most of the time represent a biased random selection
+- the individual date is 'untrustworthy'
+- probably you are more interested in the underlying pattern than the value of the individual date
+- Inverse Distance Weighted (IDW) consider all points around a certain cell (pixel) to be interpolated
+- the further away a point is, the less impact it should have
+
+> Tobler's first law of geography: everything is related to everything else, but near things are more related than distant things
+
+.center[
+![:width 55%](images/idw_interpolation.png)
+]
+.caption[Source: https://docs.qgis.org]
+
+---
+## Inverse Distance Weighted (IDW)
+
+.pull-left[
+for a pixel to interpolated:
+
+- take all the points and their values
+- 'calculate a mean' in so far, as values close to the pixel have a higher impact than values further away
+- how much distance is 'penalizing' depends on the 'power' value:
+  - higher power result in points further away have lesser impact
+]
+
+.pull-right[
+![](images/image001.gif)
+]
+.center[
+![:width 30%](images/image003.gif)
+![:width 48%](images/Shepard_interpolation_2.png)
+
+]
+.caption[Source: http://www.geography.hunter.cuny.edu. Left image: green line: smaller power value, dashed line: higher power value]
+---
+## IDW in QGIS
+
+.pull-left[
+1. In the toolbox ![](images/toolbox_icon.png), search for 'idw'
+2. Select 'IDW Interpolation'
+3. Select the input layer
+4. Select CALBP as interpolation attribute
+5. Click on the '+' icon
+6. Select the extend to be calculated from the layer extend
+7. Specify the resolution either in width or in height
+8. Specify the power P. You can leave it for now at the default value 2.
+9. Click on 'Run'
+]
+
+.pull-right[
+![:width 90%](images/idw01.png) ![:width 90%](images/idw02.png)
+]
+---
+## IDW in QGIS result
+
+.pull-left[
+- after changing to pseudocolor, the result is much more regionalised
+- the higher the power, the more the individual points will be relevant (more 'measles')
+- the lesser the power, the more the general pattern will be visible (smoother)
+
+]
+.pull-right[
+![](images/image003.gif)
+]
+.center[
+![:width 48%](images/idw03.png) ![:width 48%](images/idw04.png)
+.caption[Left: Power 2. Right: Power 0.5.]
+]
 ---
 ## Contours
+
+.pull-left[
+- Colors give already a good impression about the general pattern
+- Contours are lines connecting positions of the same value in a raster dataset representing continuous phenomena
+- Contour lines are useful in surface mapping, as they make it possible to visualise both flat and steep surfaces (distance between contour lines) and ridges and valleys (approaching and diverging lines)
+- they also can be used to enhance the visualisation of interpolation
+]
+
+.pull-right[
+![](images/Curvas_nivel_30m.jpg)
+.caption[Source: https://www.giscourse.com.]
+]
+---
+## Contours in QGIS
+
+.pull-left[
+1. Select 'Raster > Extraction > Contour' from the menue
+2. Select the input layer
+3. (In multichannel raster you might need to select the correct channel)
+4. Specify the distance between the contour lines
+5. (If your range should not start from 0, you could define an offset)
+6. Click on 'Run'
+]
+
+.pull-right[
+![:width 90%](images/contour01.png) ![:width 90%](images/contour02.png)
+]
+---
+## Contours in QGIS Result
+
+Now you should see the interpolation enhanced with contour lines, that make it easier to spot patterns...
+
+.center[
+![:width 50%](images/contour03.png)
+]
+---
+## What We've Covered
+
+--
+.pull-left[
+
++ What is interpolation, and what is it good for
++ Gridding
++ Thiessen Polygons and Nearest Neighbor
++ TIN (Triangulated Irregular Network)
++ Inverse Distance Weighted (IDW)
++ Contour lines
+]
+--
+.pull-right[
+### What to choose for what?
+
+- Gridding: rarely the best option
+- Thiessen Polygons: if you assume homogenous, delimited areas
+- TIN: if the actual values are more relevant
+- IDW: if the underlying process is more relevant
+]
+.center[
+![:width 60%](images/gridMethod_FeaturesTbl.png)
+
+.caption[Source: https://www.battelleecology.org]
+]
+---
+
+## Homework
+
++ Get the [archaeological sites of the Kanton bern](data/fundstellen_mit_hoehen.zip) with elevation (field: altitude1)
++ try out different interpolation algorithms
++ Which algorithm gives the best result for interpolation of elevation?
++ Send me your assessement and the best result via email (martin.hinz@iaw.unibe.ch) as screenshot or exported map
 
 ---
 class: inverse, middle, center
 # Any questions?
 
-![:width 48%](images/gridding03.png) ![:width 48%](images/gridding04.png)
+![:width 20%](images/destruction_island.jpg)
+
+.caption[Source: https://www.instagram.com/sadtopographies]
+
 .footnote[
 .right[
 .tiny[
