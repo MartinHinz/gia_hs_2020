@@ -80,19 +80,87 @@ cat(rmarkdown::metadata$date)
 
 ---
 
-```{r}
+## Options for Background Maps
+### Stamen
+
+Work also for small scale
+
+```{r echo=FALSE}
 library(mapview)
 library(leaflet)
 
 library(magrittr)
+```
 
+.pull-left[
+TonerBackground
+```{r echo=FALSE}
 leaflet() %>% addProviderTiles("Stamen.TonerBackground") %>% setView(7.5, 47, zoom = 8)
+```
+]
+
+.pull-right[
+TerrainBackground
+```{r echo=FALSE}
 leaflet() %>% addProviderTiles("Stamen.TerrainBackground") %>% setView(7.5, 47, zoom = 8)
-leaflet() %>% addProviderTiles("Esri.WorldShadedRelief") %>% setView(7.5, 47, zoom = 8)
+```
+]
+---
+
+## Options for Background Maps
+### Esri
+
+More natural Variants, large scale
+
+.pull-left[
+WorldTerrain
+```{r echo=FALSE}
 leaflet() %>% addProviderTiles("Esri.WorldTerrain") %>% setView(7.5, 47, zoom = 8)
+```
+]
+
+.pull-right[
+WorldPhysical
+```{r echo=FALSE}
 leaflet() %>% addProviderTiles("Esri.WorldPhysical") %>% setView(7.5, 47, zoom = 8)
+```
+]
+---
+
+## Options for Background Maps
+### Esri
+
+More neutral Variants, large scale
+
+.pull-left[
+WorldShadedRelief
+```{r echo=FALSE}
+leaflet() %>% addProviderTiles("Esri.WorldShadedRelief") %>% setView(7.5, 47, zoom = 8)
+```
+]
+
+.pull-right[
+WorldGrayCanvas
+```{r echo=FALSE}
 leaflet() %>% addProviderTiles("Esri.WorldGrayCanvas") %>% setView(7.5, 47, zoom = 8)
+```
+]
+
+---
+
+## Options for Background Maps
+### CartoDB
+
+Good for man made features
+
+.center[
+Positron
+```{r echo=FALSE}
 leaflet() %>% addProviderTiles("CartoDB.Positron") %>% setView(7.5, 47, zoom = 8)
+```
+]
+
+
 
 
 ```
