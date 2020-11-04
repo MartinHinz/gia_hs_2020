@@ -167,10 +167,6 @@ leaflet() %>% addProviderTiles("CartoDB.Positron") %>% setView(7.5, 47, zoom = 8
 ]
 
 
-
-
-```
-
 ---
 ## Building a background map from scratch
 
