@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>GIS in Archaeology</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Hinz" />
+    <meta name="date" content="2020-04-11" />
+    <script src="libs/header-attrs-2.3/header-attrs.js"></script>
+    <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+    <script src="libs/jquery-1.12.4/jquery.min.js"></script>
+    <link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+    <script src="libs/leaflet-1.3.1/leaflet.js"></script>
+    <link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+    <script src="libs/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+    <script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+    <link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+    <script src="libs/leaflet-binding-2.0.3/leaflet.js"></script>
+    <script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+    <script src="libs/leaflet-providers-plugin-2.0.3/leaflet-providers-plugin.js"></script>
+    <link rel="stylesheet" href="../libs/default.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/default-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/customize.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide, center, middle
+
+
+#  GIS in Archaeology
+
+##  08 - Making nicer Maps
+
+###  Martin Hinz
+
+####  Institut für Archäologische Wissenschaften, Universität Bern
+
+04/11/20
+
+---
+# Choosing a Base Map
+--
+
++ Think about what someone reading your map needs to see for context
+--
+
++ Think about how the base map interacts with the data on your map
+
+---
+
+# Base Maps - Hierarchy
+--
+
++ If your data is the most important part of the map, make sure it looks more important than the base map
+--
+
++ Avoid base maps that strongly emphasize features that aren't relevant on your map
+
+---
+
+# Base Maps - Colors
+--
+
++ Choose base maps with colors that complement the colors on your map
+--
+
++ The contrast between the color on your map and the color on the base map should be enough to make your layers clearly visible
+
+---
+
+
+```r
+library(mapview)
+library(leaflet)
+
+library(magrittr)
+
+leaflet() %&gt;% addProviderTiles("Stamen.TonerBackground") %&gt;% setView(7.5, 47, zoom = 8)
+```
+
+<div id="htmlwidget-54756b36ae6e90124ab0" style="width:504px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-54756b36ae6e90124ab0">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["Stamen.TonerBackground",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]}],"setView":[[47,7.5],8,[]]},"evals":[],"jsHooks":[]}</script>
+
+```r
+leaflet() %&gt;% addProviderTiles("Stamen.TerrainBackground") %&gt;% setView(7.5, 47, zoom = 8)
+```
+
+<div id="htmlwidget-8314e3492a5388c8c82b" style="width:504px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8314e3492a5388c8c82b">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["Stamen.TerrainBackground",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]}],"setView":[[47,7.5],8,[]]},"evals":[],"jsHooks":[]}</script>
+
+```r
+leaflet() %&gt;% addProviderTiles("Esri.WorldShadedRelief") %&gt;% setView(7.5, 47, zoom = 8)
+```
+
+<div id="htmlwidget-c911eac60e443d0ca582" style="width:504px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c911eac60e443d0ca582">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["Esri.WorldShadedRelief",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]}],"setView":[[47,7.5],8,[]]},"evals":[],"jsHooks":[]}</script>
+
+```r
+leaflet() %&gt;% addProviderTiles("Esri.WorldTerrain") %&gt;% setView(7.5, 47, zoom = 8)
+```
+
+<div id="htmlwidget-176de79376b7b07fd9bf" style="width:504px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-176de79376b7b07fd9bf">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["Esri.WorldTerrain",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]}],"setView":[[47,7.5],8,[]]},"evals":[],"jsHooks":[]}</script>
+
+```r
+leaflet() %&gt;% addProviderTiles("Esri.WorldPhysical") %&gt;% setView(7.5, 47, zoom = 8)
+```
+
+<div id="htmlwidget-67bfa6512ee76c0526d9" style="width:504px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-67bfa6512ee76c0526d9">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["Esri.WorldPhysical",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]}],"setView":[[47,7.5],8,[]]},"evals":[],"jsHooks":[]}</script>
+
+```r
+leaflet() %&gt;% addProviderTiles("Esri.WorldGrayCanvas") %&gt;% setView(7.5, 47, zoom = 8)
+```
+
+<div id="htmlwidget-14d25b9cba0ea9bc990f" style="width:504px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-14d25b9cba0ea9bc990f">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["Esri.WorldGrayCanvas",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]}],"setView":[[47,7.5],8,[]]},"evals":[],"jsHooks":[]}</script>
+
+```r
+leaflet() %&gt;% addProviderTiles("CartoDB.Positron") %&gt;% setView(7.5, 47, zoom = 8)
+```
+
+<div id="htmlwidget-55c4b2d1e646d7e6170a" style="width:504px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-55c4b2d1e646d7e6170a">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]}],"setView":[[47,7.5],8,[]]},"evals":[],"jsHooks":[]}</script>
+
+---
+## Building a background map from scratch
+
+If there is no Basemap according to our needs, we have to build on on our own...
+
+* Political borders (if necessary)
+* Waterbodies
+* Mountains
+
+---
+## Political borders (if necessary)
+
+* depends on the area and scale you are working with
+* good source for Switzerland: https://map.geo.admin.ch
+* in general: https://www.naturalearthdata.com
+
+![:width 48%](images/geoadmin.jpg) ![:width 48%](images/ned.png)
+.caption[Source: https://map.geo.admin.ch; https://www.naturalearthdata.com]
+
+---
+## Waterbodies
+
+.pull-left[
+large scale: 
+* Natural Earth Data &gt; Physical
+  * Ocean
+  * Rivers + lake centerlines
+  * Lakes + Reservoirs
+* World wide + Europe supplement
+]
+
+.pull-right[
+small scale:
+* depends on your region and scale
+* [CCM River and Catchment Database, version 2.1 (CCM2)](https://ccm.jrc.ec.europa.eu/php/index.php?action=view&amp;id=24) for Europe
+]
+
+![:width 48%](images/ned_rivers.png) ![:width 48%](images/ccm2.png)
+.caption[Source: https://www.naturalearthdata.com; https://ccm.jrc.ec.europa.eu]
+
+---
+## Mountains -&gt; DEM (Digital Elevation Model)
+
+.pull-left[
+* DEM: a computer based representation of elevation data 
+* Mostly available as raster data, sometimes as TIN
+* large scale: Mostly from remote (satellite) data
+* small scale: areal photography or measurements, or even ground based surveys
+* methods
+  * Radar
+  * LiDAR
+  * Structure from motion
+  * ...
+  
+]
+
+.pull-right[
+![:width 50%](images/spotview.gif)![:width 50%](images/GUID-6D12B139-0878-494D-ABC4-01C0250FB757-web.png)
+.caption[Sources: https://crisp.nus.edu.sg; https://desktop.arcgis.com]
+]
+
+DEM can come in EPSG 4326 (WGS 84 lat/lng).
+
+Then might be necessary to reproject the DEM to a projected (meter based) CRS. We cover this in the next session...
+
+---
+## Mountains
+
+.pull-left[
+rendered: 
+* Natural Earth Data &gt; Raster
+  * Gray Earth
+  * Shaded Relief
+  
+![](images/ned_shaded.png)
+]
+
+.pull-right[
+DEM:
+* depends on your region and scale
+* GMTED2010 (https://topotools.cr.usgs.gov/gmted_viewer/viewer.htm) 7.5 arc second resolution (~ 225 m along the equator)
+* SRTM (e.g. https://dwtkns.com/srtm30m) 3 arc second resolution (~ 90 meters along the equator)
+* ASTER (e.g. https://search.earthdata.nasa.gov/) 3 arc second resolution (~ 30 meters along the equator)
+* TanDEM-X (90 m after registration, 12 m only with project submission)
+* LiDAR
+]
+---
+## Lets put it together
+
+- Download the [Bernese Archaeological sites](data/fundstellen_mit_hoehen.zip)
+- Download the [Kantonal Borders of Switzerland](data/kantonsgrenzen.zip)
+- Download the Waterbodies
+  - [Rivers](data/rivers_switzerland.zip)
+  - [Lakes](data/lakes_switzerland.zip)
+- Download the [DEM for the Kanton of Bern](data/dem_bern.tif) (GMTED2010, 7.5 arc seconds)
+- Start QGIS and add all layers
+
+All not best possible resolution, but they will serve their purpose
+
+.right[
+![:width 50%](images/map_intermediate.png)
+]
+---
+## Your Map will probably look like this - 
+
+after you arranged the layers in a meaninful order...
+
+![:width 75%](images/map_begin.png)
+
+---
+## Styling Lakes topo water
+
+* Right Click on the layer
+* Properties &gt; Symbology
+* Most simple: Select topo water from the suggested styles
+
+![:width 48%](images/sym_lakes1.png) ![:width 48%](images/sym_lakes2.png)
+.caption[Source: Lakes symbology topo water + result.]
+
+---
+## Styling Lakes shapeburst
+
+* More elaborated: Select shapeburst from layer type
+* select a different (darker) shade of blue as second color
+* set a distance (eg. 3 mm)
+* add a blur (eg. 50%)
+* Maybe already too fancy for scientific maps!?
+
+![:width 48%](images/sym_lakes3.png) ![:width 48%](images/sym_lakes4.png)
+.caption[Source: Lakes symbology topo water + result.]
+---
+## Styling Rivers topo hydrology
+
+* Right Click on the layer
+* Properties &gt; Symbology
+* Most simple: Select topo hydrology from the suggested styles
+
+![:width 48%](images/sym_river01.png) ![:width 48%](images/sym_river02.png)
+.caption[Source: Rivers symbology topo hydrology + result.]
+---
+## Styling Rivers size based
+
+More advanced: Sometimes you have informations about the size of rivers. Quite often it is in the form of [Strahler number](https://en.wikipedia.org/wiki/Strahler_number). We can use this information to specify the river width.
+
+.pull-left[
+* Select 'Graduated' as style option
+* Select 'Size' as method
+* Select 'stream_ord' as value
+* Select sizes and Classify (Best with 'Equal Interval')
+]
+
+.pull-right[
+![:width 50%](images/strahler-flussordnung.png)
+]
+
+![:width 45%](images/sym_river03.png) ![:width 45%](images/sym_river04.png)
+.caption[Source: Rivers symbology graduated + result.]
+
+---
+## Visualisation of Topography
+
+We need a DEM (Digital Elevation Model)
+
+* Either: Hillshade combined with color ramp visualisation of elevation (more colorful)
+* Or: Hillshade combined with polygon  (more 'scientific')
+
+.center[
+![:width 45%](images/ner_10m_hypso_water_river_lake.gif) ![:width 45%](images/ner_10m_shaded_relief.gif)
+.caption[Source: http://https://www.naturalearthdata.com/]
+]
+
+---
+## Topographic color ramp
+
+For this, we make our polygon layer invisible
+
+* Select Properties &gt; Symbology from the DEM layer
+* Select Pseudocolor
+* Select 'Create new color ramp'
+* Select 'catalog: cpt-city' from the following dialog
+* There, under Topography, select a color ramp of your choice
+* "Classify", "Apply" and "OK"
+
+.center[
+![:width 48%](images/topo_color1.png) ![:width 48%](images/topo_color2.png)
+]
+---
+## Topographic color ramp Result
+
+Not bad, but a bit flat...
+
+.center[
+![:width 48%](images/topo_color3.png)
+]
+
+We need to add hill shading!
+
+---
+## Hillshading
+
+&gt; Hillshading is a technique used to create a realistic view of terrain by creating a three-dimensional surface from a two-dimensional display of it. Hillshading creates a hypothetical illumination of a surface by setting a position for a light source and calculating an illumination value for each cell based on the cell's relative orientation to the light, or based on the slope and aspect of the cell. - http://www.geography.hunter.cuny.edu
+
+.center[
+![:width 45%](images/image001.gif) ![:width 45%](images/image002.gif)
+.caption[Source: http://www.geography.hunter.cuny.edu]
+]
+
+---
+## Hill Shading
+
+We need the DEM Raster layer twice: once for the color, once for the hillshading
+
+* Right click on the layer and dublicate
+* Right click on the upper copy and select Properties &gt; Symbology
+* Select 'Hill Shading' as Visualisation
+* You can change angle of sunlight
+* Select 'Multi-Directional' and 'Multiply' as Blending Mode
+
+.center[
+![:width 48%](images/hillshading01.png) ![:width 48%](images/hillshading02.png)
+]
+---
+## Hill Shading Result
+
+That looks rather nice!
+
+It also looks nice if we put the vectors below the hillshade and make the colored DEM invisible.
+
+.center[
+![:width 48%](images/hillshading03.png)![:width 48%](images/hillshading04.png)
+]
+---
+## Overview Map
+
+* more than one map in the map layout
+* often necessary to indicate the general location of the mapped area
+* can also be 'multi staged'
+* can also be a detailed map...
+
+.center[
+![:width 48%](images/qgis3_layout.png)![:width 42%](images/3510.png)
+.caption[Examples of Overview and Detail map layout. Source: http://http://www.qgistutorials.com]
+]
+
+---
+## Create an Overview Map in QGIS (1)
+
+* Add another Worldwide Basemap layer to your map, eg. ESRI Gray light
+* Start the Print Composer
+* Add the current map
+* Select 'Lock Layer'
+
+.center[
+![:width 48%](images/minimap01.png)![:width 42%](images/minimap02.png)
+]
+
+---
+## Create an Overview Map in QGIS (2)
+
+* Go back to the main window
+* Zoom to a europe wide extend
+* remove all layers except the background layer
+* Go back to the Print Composer Window
+* Add another map eg. to the left upper corner
+
+.center[
+![:width 48%](images/minimap03.png)![:width 42%](images/minimap04.png)
+]
+
+---
+## Create an Overview Map in QGIS (3)
+
+* Select the small map
+* In the Elements Tab, select Overview
+* click on the + item
+* Select map 1 as map frame
+
+You might also like to frame the minimap
+
+* Find 'Frame' in the element properties and check the box
+
+.center[
+![:width 48%](images/minimap05.png)
+]
+
+---
+
+# What We've Covered
+--
+
++ Different Basemaps
+--
+
++ Getting Vector and Raster Data
+--
+
++ Styling Water Bodies
+--
+
++ Getting and Styling DEMs
+--
+
++ Hillshading
+--
+
++ Making an Overview Maps
+
+---
+## More Map Design with QGIS
+
+.pull-left[
+Gretchen Peterson and Anita Graser QGIS Map Design, 2nd Edition (Locate Press, 2018), pp. 200 ISBN: 978-0989421751.
+]
+
+.pull-right[
+![:width 90%](images/qmd2.png)
+]
+
+---
+
+# Homework
+
+**No Homework!**
+
+
+---
+class: inverse, middle, center
+# Any questions?
+
+![:width 20%](images/bloody-point.jpg)
+
+.caption[Source: https://www.instagram.com/sadtopographies]
+
+.footnote[
+.right[
+.tiny[
+You might find the course material (including the presentations) at
+
+https://github.com/MartinHinz/gia_hs_2020
+
+You can see the rendered presentations at
+
+http://martinhinz.github.io/gia_hs_2020
+
+You can contact me at
+
+&lt;a href="mailto:martin.hinz@iaw.unibe.ch"&gt;martin.hinz@iaw.unibe.ch&lt;/a&gt;
+]
+]
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../libs/remark-latest.min.js"></script>
+<script src="../libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"fig_caption": true,
+"ratio": "16:10"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
