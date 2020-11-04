@@ -265,7 +265,7 @@ DEM:
 - Download the Waterbodies
   - [Rivers](data/rivers_switzerland.zip)
   - [Lakes](data/lakes_switzerland.zip)
-- Download the [DEM for the Kanton of Bern](data/dem_bern.tif) (GMTED2010, 7.5 arc seconds)
+- Download the [DEM for the Kanton of Bern](data/data_switzerland_2056.tif) (GMTED2010, 7.5 arc seconds)
 - Start QGIS and add all layers
 
 All not best possible resolution, but they will serve their purpose
