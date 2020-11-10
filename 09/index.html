@@ -1,53 +1,29 @@
----
-title: "GIS in Archaeology"
-subtitle: "09 - Terrain Data"
-author: "Martin Hinz"
-institute: "Institut für Archäologische Wissenschaften, Universität Bern"
-fontsize: 9pt
-date: "11/11/20"
-output:
-  xaringan::moon_reader:
-    chakra: "../libs/remark-latest.min.js"
-    css: ["../libs/default.css", "../libs/default-fonts.css", "../libs/customize.css"]
-    lib_dir: "libs"
-    seal: false
-    nature:
-      beforeInit: "../libs/macros.js"
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
-      fig_caption: yes
-      ratio: "16:10"
----
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>GIS in Archaeology</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Hinz" />
+    <meta name="date" content="2020-11-11" />
+    <link rel="stylesheet" href="../libs/default.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/default-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/customize.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
 class: title-slide, center, middle
-```{r, echo = FALSE}
-# https://stackoverflow.com/questions/25646333/code-chunk-font-size-in-rmarkdown-with-knitr-and-latex
-def.chunk.hook  <- knitr::knit_hooks$get("chunk")
-knitr::knit_hooks$set(chunk = function(x, options) {
-  x <- def.chunk.hook(x, options)
-  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
-})
-```
 
-```{r, echo = FALSE, results="asis"}
-cat('# ', rmarkdown::metadata$title)
-```
 
-```{r, echo = FALSE, results="asis"}
-cat('## ', rmarkdown::metadata$subtitle)
-```
+#  GIS in Archaeology
 
-```{r, echo = FALSE, results="asis"}
-cat('### ', rmarkdown::metadata$author)
-```
+##  09 - Terrain Data
 
-```{r, echo = FALSE, results="asis"}
-cat('#### ', rmarkdown::metadata$institute)
-```
+###  Martin Hinz
 
-```{r, echo = FALSE, results="asis"}
-cat(rmarkdown::metadata$date)
-```
+####  Institut für Archäologische Wissenschaften, Universität Bern
+
+11/11/20
 
 ---
 ## Content yet to come
@@ -79,7 +55,7 @@ Photos by Martin Sattler, Matt Nelson, Pierpaolo Lanfrancotti on Unsplash
 .pull-left[
 ### What is terrain
 
-> *An area of land, when considering its natural features. - Cambridge Dictionary*
+&gt; *An area of land, when considering its natural features. - Cambridge Dictionary*
 
 * Continually varying surface
   * What varies (for us) is elevation
@@ -182,7 +158,7 @@ Then might be necessary to reproject the DEM to a projected (meter based) CRS. W
 
 * I selected the SRTM tile around Switzerland
 * With that, I am at 32 N(orth)
-* Go to 'Raster > Projection > Transform (Reproject)'
+* Go to 'Raster &gt; Projection &gt; Transform (Reproject)'
 * Select your input Raster and CRS
 * Select your output CRS
   * search for in my case "utm 32N"
@@ -201,7 +177,7 @@ Then might be necessary to reproject the DEM to a projected (meter based) CRS. W
 * Identifies the slope (gradient, or rate of maximum change in z-value) from each cell of a raster surface.
 * can be given in degree or in percentage
 
-> *Conceptually, the tool **fits a plane to the z-values of a 3 x 3 cell neighborhood** around the processing or center cell. The slope value of this plane is calculated ... The lower the slope value, the flatter the terrain - ArcGIS*
+&gt; *Conceptually, the tool **fits a plane to the z-values of a 3 x 3 cell neighborhood** around the processing or center cell. The slope value of this plane is calculated ... The lower the slope value, the flatter the terrain - ArcGIS*
 ]
 
 .pull-right[
@@ -211,7 +187,7 @@ Then might be necessary to reproject the DEM to a projected (meter based) CRS. W
 ---
 ## Calculating Slope in QGIS
 
-* Go to 'Raster > Analysis > Slope'
+* Go to 'Raster &gt; Analysis &gt; Slope'
 * You could select to calculate percent instead of degree
 * usually you do not need to change anything
 * Click Run
@@ -239,7 +215,7 @@ Then might be necessary to reproject the DEM to a projected (meter based) CRS. W
 * The pixels will have a value from 0-360° measured in degress from north indicating the azimuth
 * Flat areas having no downslope direction are given a value of 9999.
 
-> *Also here, the tool **fits a plane to the z-values of a 3 x 3 cell neighborhood** around the processing or center cell. Then the direction is calculated in which the plane is facing.*
+&gt; *Also here, the tool **fits a plane to the z-values of a 3 x 3 cell neighborhood** around the processing or center cell. Then the direction is calculated in which the plane is facing.*
 ]
 
 .pull-right[
@@ -252,7 +228,7 @@ Then might be necessary to reproject the DEM to a projected (meter based) CRS. W
 ---
 ## Calculating Aspect in QGIS
 
-* Go to 'Raster > Analysis > Aspect' (Perspektive)
+* Go to 'Raster &gt; Analysis &gt; Aspect' (Perspektive)
 * You could select to calculate the trigonometric angle (n, e, s, w)
 * usually you do not need to change anything
 * Click Run
@@ -290,7 +266,7 @@ Then might be necessary to reproject the DEM to a projected (meter based) CRS. W
 ---
 ## Calculating TPI in QGIS
 
-* Go to 'Raster > Analysis > Topographical Position (TPI)'
+* Go to 'Raster &gt; Analysis &gt; Topographical Position (TPI)'
 * you actually can't change anything here
 * Click Run
 
@@ -445,7 +421,133 @@ http://martinhinz.github.io/gia_hs_2020
 
 You can contact me at
 
-<a href="mailto:martin.hinz@iaw.unibe.ch">martin.hinz@iaw.unibe.ch</a>
+&lt;a href="mailto:martin.hinz@iaw.unibe.ch"&gt;martin.hinz@iaw.unibe.ch&lt;/a&gt;
 ]
 ]
 ]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../libs/remark-latest.min.js"></script>
+<script src="../libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"fig_caption": true,
+"ratio": "16:10"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
