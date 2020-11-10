@@ -50,17 +50,6 @@ cat(rmarkdown::metadata$date)
 ```
 
 ---
-## Content yet to come
-
-* original DEM Runterladen und Reprojizieren
-* Slope
-* Aspect
-* TPI
-* Landform
-* Channel Network
-
-
----
 ## Terrain
 
 .pull-left[
