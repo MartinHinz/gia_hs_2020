@@ -1,53 +1,28 @@
----
-title: "GIS in Archaeology"
-subtitle: "10 - Least Cost Path Analysis"
-author: "Martin Hinz"
-institute: "Institut für Archäologische Wissenschaften, Universität Bern"
-fontsize: 9pt
-date: "18/11/20"
-output:
-  xaringan::moon_reader:
-    chakra: "../libs/remark-latest.min.js"
-    css: ["../libs/default.css", "../libs/default-fonts.css", "../libs/customize.css"]
-    lib_dir: "libs"
-    seal: false
-    nature:
-      beforeInit: "../libs/macros.js"
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
-      fig_caption: yes
-      ratio: "16:10"
----
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>GIS in Archaeology</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Hinz" />
+    <link rel="stylesheet" href="../libs/default.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/default-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/customize.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
 class: title-slide, center, middle
-```{r, echo = FALSE}
-# https://stackoverflow.com/questions/25646333/code-chunk-font-size-in-rmarkdown-with-knitr-and-latex
-def.chunk.hook  <- knitr::knit_hooks$get("chunk")
-knitr::knit_hooks$set(chunk = function(x, options) {
-  x <- def.chunk.hook(x, options)
-  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
-})
-```
 
-```{r, echo = FALSE, results="asis"}
-cat('# ', rmarkdown::metadata$title)
-```
 
-```{r, echo = FALSE, results="asis"}
-cat('## ', rmarkdown::metadata$subtitle)
-```
+#  GIS in Archaeology
 
-```{r, echo = FALSE, results="asis"}
-cat('### ', rmarkdown::metadata$author)
-```
+##  10 - Least Cost Path Analysis
 
-```{r, echo = FALSE, results="asis"}
-cat('#### ', rmarkdown::metadata$institute)
-```
+###  Martin Hinz
 
-```{r, echo = FALSE, results="asis"}
-cat(rmarkdown::metadata$date)
-```
+####  Institut für Archäologische Wissenschaften, Universität Bern
+
+18/11/20
 
 ---
 ## What is it good for?
@@ -116,7 +91,7 @@ We reduce the amount of data to be processed to speed things up.
 * Download the tile
 * Add the tile to QGIS
 * Reproject the tile to epsg 2056
-* Click on 'Raster > Extraction > Crop Raster to Extend'
+* Click on 'Raster &gt; Extraction &gt; Crop Raster to Extend'
 * Select the Reprojected Raster
 * Select Crop Extend from Map Extend
 
@@ -155,23 +130,23 @@ We are looking for the fastest path. Remember:
 ## Cost functions in respect to Slope
 
 ### 'Ox cart function' according to Herzog 2012
-$f(s)=1+(s/c)²$
+`\(f(s)=1+(s/c)²\)`
 
 s = Slope in percent; c = critical slope = 10 bis 12 %
 
 ### Energy consumption function for pedestrians according to Herzog 2012
 
-$f(s) = 1337,8s^6+278,19s^5-517,39s^4-78,199s^3+93,419s²+19,825s+1,64$
+`\(f(s) = 1337,8s^6+278,19s^5-517,39s^4-78,199s^3+93,419s²+19,825s+1,64\)`
 
 s = Slope in percentage / 100
 
 ### Inverse speed function for pedestrians according to Tobler 1993
 
-$f(s; Tobler away)= 1/(6 ^{-3,5*abs (S + 0,05)})$
+`\(f(s; Tobler away)= 1/(6 ^{-3,5*abs (S + 0,05)})\)`
 
-$f(s; Tobler towards)=1/(6 ^{-3,5*abs (S – 0,05)})$
+`\(f(s; Tobler towards)=1/(6 ^{-3,5*abs (S – 0,05)})\)`
 
-$f (s; Tobler Mittelwert)=(f (s;Tobler away)+f (s; Tobler towards))/2$
+`\(f (s; Tobler Mittelwert)=(f (s;Tobler away)+f (s; Tobler towards))/2\)`
 ---
 ## Cost functions in respect to Slope
 ### Why does in matter?
@@ -209,7 +184,7 @@ $f (s; Tobler Mittelwert)=(f (s;Tobler away)+f (s; Tobler towards))/2$
 * We use the Raster Calculator of QGIS
 * We just plugin the ox cart function like below:
 
-$f(s)=1+(s/c)²$
+`\(f(s)=1+(s/c)²\)`
 
 1+(Slope/12)^2
 
@@ -249,7 +224,7 @@ $f(s)=1+(s/c)²$
 
 ---
 ## Dijkstra-Algorithm
-> The basic idea of the algorithm is to always follow the edge that promises the shortest route section from the start node. Other edges are only followed if all shorter route sections (also beyond other nodes) have been considered. This procedure ensures that when a node is reached, no shorter path to it can exist. - wikipedia
+&gt; The basic idea of the algorithm is to always follow the edge that promises the shortest route section from the start node. Other edges are only followed if all shorter route sections (also beyond other nodes) have been considered. This procedure ensures that when a node is reached, no shorter path to it can exist. - wikipedia
 
 .pull-left[
 1. find the most cost-effective step from the starting point
@@ -266,7 +241,7 @@ $f(s)=1+(s/c)²$
 ---
 ## Some Movement Directions
 
-More possible directions -> more precise results, but also more computational time
+More possible directions -&gt; more precise results, but also more computational time
 
 ![](images/movement_directions.png)
 
@@ -346,7 +321,133 @@ http://martinhinz.github.io/gia_hs_2020
 
 You can contact me at
 
-<a href="mailto:martin.hinz@iaw.unibe.ch">martin.hinz@iaw.unibe.ch</a>
+&lt;a href="mailto:martin.hinz@iaw.unibe.ch"&gt;martin.hinz@iaw.unibe.ch&lt;/a&gt;
 ]
 ]
 ]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../libs/remark-latest.min.js"></script>
+<script src="../libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"fig_caption": true,
+"ratio": "16:10"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
