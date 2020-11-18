@@ -491,7 +491,7 @@ Free available from within the university network.
 class: inverse, middle, center
 # Any questions?
 
-![:width 20%](images/bloody-point.jpg)
+![:width 20%](images/misery.jpg)
 
 .caption[Source: https://www.instagram.com/sadtopographies]
 
