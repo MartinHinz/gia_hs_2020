@@ -263,6 +263,7 @@ $f(s)=1+(s/c)²$
 .pull-right[
 ![](https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif)
 ]
+
 ---
 ## Some Movement Directions
 
@@ -270,8 +271,27 @@ More possible directions -> more precise results, but also more computational ti
 
 ![](images/movement_directions.png)
 
-The Plugin uses Dijkstra and Manhattan (Neumann) Neighborhood. There is a way independent from the plugin using SAGA, but we will not cover this here...
+---
+## Isotropic vs. anisotropic Analysis
 
+.pull-left[
+* Costs are calculated per cell
+* if you move along a slope, you actually walk on an even elevation
+* if the movement direction is not considered, it is isotropic
+* if they are taken into account, it is anisotropic
+  * more accurate, but more calculation intensive
+  * travel direction matters: The path from a -> b can be different than the path from b->a
+
+The cost raster is isotropic, the plugin uses Dijkstra and Manhattan (Neumann) Neighborhood. There is a way independent from the plugin using SAGA, but we will not cover this here...
+
+]
+
+.pull-right[
+![:width 50%](images/traverse.png)
+![](images/isotropic_vs_anisogropic.jpg)
+.caption[Source: David Lewis; Ray/Ebener 2009
+]
+]
 ---
 ## Calculating walking time from a given start point
 
@@ -295,7 +315,7 @@ The Plugin uses Dijkstra and Manhattan (Neumann) Neighborhood. There is a way in
 .caption[Comparison between a Thiessen-Polygon and an Cost-Defined (XTENT) model of the territories of the Maya lowland. Source: Ducke/Kroefges 2007]
 ]
 ---
-## Calculating in QGIS
+## Calculating in QGIS - Prerequisists
 
 .pull-left[
 We need to utilize another GIS inside QGIS: GRASS.
@@ -328,10 +348,145 @@ We need to utilize another GIS inside QGIS: GRASS.
  ![](images/calc_0_raster01.png)
 ]
 ---
+## Calculating in QGIS - Actual Calculation
+
+.pull-left[
+* Open the Toolbox ![](../09/images/toolbox_icon.png)
+* Search for 'r.walk' and open the 'r.walk.points' tool
+* Select DEM, cost0 and start layer
+* [you could define a stop point, where the maximum costs will be reached]
+* [you also can define the formula for the walking function. It defaults to Langmuir]
+* [in the advanced settings, you can specify using 'Kings move', it defaults to Manhattan move]
+* Click on Run
+
+.center[
+![:width 50%](images/rwalk01.png) 
+]]
+
+.pull-right[
+![](images/rwalk02.png)
+]
+---
+## r.walk results
+
+You get two resulting layers:
+* Movement directions contains the movement choosen for the calculation at each raster cell
+* More relevant is 'Cumulative Costs'
+  * Here, the raster holds the walking time to the pixel cell from the start point measured in seconds
+  * You can color this using pseudocolor, spectral, inverse
+
+.center[
+![:width 48%](images/rwalk_results01.png) ![:width 48%](images/rwalk_results02.png)
+.caption[left: movement directions; right: cumulative movement costs, colored with pseudocolor spectra, inverse]
+]
+---
+## Calculate the movement distance within a given time
+
+To get how far a pedestrian can walk in a given time, we can use the Contour tool, this time from SAGA:
+
+* here we can set maximum and minimum value for the contour line
+* the walking time is in seconds, so eg. 4 hours is equivalent with 4 x 60 x 60 = 14400 seconds
+
+.pull-left[
+
+* search for 'contour' in the Toolbox ![:width 5%](../09/images/toolbox_icon.png)
+* Click on 'Contour lines' tool from SAGA
+* Set 'Cumulative Costs' as layer
+* Set x,y as 'Support point type'
+* Set maximum and minimum to 14400
+* click on 'Run'
+
+.center[
+![:width 40%](images/contour01.png) 
+]]
+
+.pull-right[
+![](images/contour02.png)
+]
+
+---
+## Walking distance results
+
+* You should get a line showing the extent of a walking time of 5h
+* You can make it stick out more using Symbology (here: neon glow)
+* If you make the actual cost layer invisible, you can compare with the base map
+* In 4 hours I could get eg. to Kirchdorf
+* Compare with Google Maps: between 3h 50 min and 4h 10 min
+* or try it out yourself
+
+.center[
+![:width 48%](images/walking_distance_result01.png) ![:width 48%](images/walking_distance_result02.png)
+.caption[left: movement directions; right: cumulative movement costs, colored with pseudocolor spectra, inverse]
+]
+
+---
+## Outlook
+
+.pull-left[
+* You can use the results from r.walk also for Least Cost Path analysis:
+  * Use the SAGA 'least cost paths' tool
+  * Use the 'Cumulative costs' as input layer and the end (Basel) as source point layer
+* take care for the selection of the right movement function and use kings move if possible
+* you can combine the cumulative costs starting from both points combined to estimate movement corridors using the raster calculator and addition
+![:width 48%](images/outlook01.png)
+.caption[calculating LCP with Cumulative Costs from r.walk and Least Cost Paths tool from SAGA]
+]
+.pull-right[
+.center[
+![:width 90%](images/outlook02.png)
+![:width 90%](images/outlook03.png)
+.caption[top: comparison between LCP from plugin (red) and from r.walk (green);
+bottom: Least Cost Corridor by combining Cumulative Costs starting from both points]
+]
+
+]
+
+
+---
+
+# What We've Covered
+--
+
++ Creating a cost layer from Slope
+--
+
++ Basic Least Cost Path calculation
+--
+
++ Creating a cumulative cost (walking time) layer
+--
+
++ Estimation of walking distance in a given time
+--
+
+---
+## More on Least Cost Path Analysis
+
+.pull-left[
+White, Devin A. and Sarah L Surface-Evans. Least Cost Analysis of Social Landscapes: Archaeological Case Studies. University of Utah Press, 2012. Project MUSE muse.jhu.edu/book/41407.
+
+Free available from within the university network.
+]
+
+.pull-right[
+![:width 90%](images/9781607811718.jpg)
+]
+
+---
+
+# Homework
+
+* Select two locations of your choice (in Switzerland or the world)
+* Calculate the least cost path between them
+* Send me a screenshot
 
 ---
 class: inverse, middle, center
 # Any questions?
+
+![:width 20%](images/bloody-point.jpg)
+
+.caption[Source: https://www.instagram.com/sadtopographies]
 
 .footnote[
 .right[
