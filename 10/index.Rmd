@@ -49,6 +49,13 @@ cat('#### ', rmarkdown::metadata$institute)
 cat(rmarkdown::metadata$date)
 ```
 
+.footnote[
+.right[
+.tiny[
+You can download a [pdf of this presentation](gis_in_archaeology_10.pdf).
+]
+]
+]
 ---
 ## What is it good for?
 
