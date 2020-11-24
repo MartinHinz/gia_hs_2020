@@ -259,7 +259,7 @@ Least cost corridors can be used instead of a single least cost path to connect 
 To get how far a pedestrian can walk in a given time, we can use the Contour tool, this time from SAGA:
 
 * here we can set maximum and minimum value for the contour line
-* the walking time is in seconds, so eg. 4 hours is equivalent with 4 x 60 x 60 = 14400 seconds
+* the walking time is in seconds, so eg. 1 hours is equivalent with 1 x 60 x 60 = 3600 seconds
 
 .pull-left[
 
@@ -267,7 +267,7 @@ To get how far a pedestrian can walk in a given time, we can use the Contour too
 * Click on 'Contour lines' tool from SAGA
 * Set 'Cumulative Costs' as layer
 * Set x,y as 'Support point type'
-* Set maximum and minimum to 14400
+* Set maximum and minimum to **3600**
 * click on 'Run'
 
 .center[
@@ -281,11 +281,11 @@ To get how far a pedestrian can walk in a given time, we can use the Contour too
 ---
 ## Walking distance results
 
-* You should get a line showing the extent of a walking time of 5h
+* You should get a line showing the extent of a walking time of 1h
 * You can make it stick out more using Symbology (here: neon glow)
 * If you make the actual cost layer invisible, you can compare with the base map
-* In 4 hours I could get eg. to Kirchdorf
-* Compare with Google Maps: between 3h 50 min and 4h 10 min
+* In 1 hours I could get eg. to Kehrsatz
+* Compare with Google Maps: 1h 10 min including river crossing
 * or try it out yourself ;-)
 
 .center[
