@@ -1,6 +1,6 @@
 ---
 title: "GIS in Archaeology"
-subtitle: "11 - Visibility Analysis"
+subtitle: "11 - Time Distance and Site Catchment Analysis"
 author: "Martin Hinz"
 institute: "Institut für Archäologische Wissenschaften, Universität Bern"
 fontsize: 9pt
