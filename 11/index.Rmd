@@ -59,7 +59,10 @@ You can download a [pdf of this presentation](gis_in_archaeology_11.pdf).
 ---
 # Before we start:
 
-You might need to download the [SRTM DEM of Switzerland in EPSG 2056](data/srtm_2056_cut.tif), if you do not have them on your PC right now!
+You might need to download the following data, if you do not have them on your PC right now:
+* [SRTM DEM of Switzerland in EPSG 2056](data/srtm_2056_cut.tif)
+* The [start point](data/start.zip) as shapefile vector layer
+* The [end point](data/end.zip) as shapefile vector layer
 
 ---
 # A small repetition
