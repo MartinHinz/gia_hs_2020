@@ -50,11 +50,591 @@ cat(rmarkdown::metadata$date)
 ```
 
 ---
-## Content yet to come
+# A small repetition
+---
+## Dijkstra-Algorithm
+> The basic idea of the algorithm is to always follow the edge that promises the shortest route section from the start node. Other edges are only followed if all shorter route sections (also beyond other nodes) have been considered. This procedure ensures that when a node is reached, no shorter path to it can exist. - wikipedia
+
+.pull-left[
+1. find the most cost-effective step from the starting point
+2. note the cost and mark the destination of the step.
+3. find the cheapest step from a visited cell adjacent to an unused cell
+4. note the costs and the starting point of the step and the destination
+5. repeat 3 and 4 until the target point is reached.
+6. reconstruct the best route by stringing together the best connections from the destination to the starting point.(after Oliver Nakoinz)
+]
+
+.pull-right[
+![](https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif)
+]
+
+---
+## Some Movement Directions
+
+More possible directions -> more precise results, but also more computational time
+
+![](images/movement_directions.png)
+
+---
+## Isotropic vs. anisotropic Analysis
+
+.pull-left[
+* Costs are calculated per cell
+* if you move along a slope, you actually walk on an even elevation
+* if the movement direction is not considered, it is isotropic
+* if they are taken into account, it is anisotropic
+  * more accurate, but more calculation intensive
+  * travel direction matters: The path from a -> b can be different than the path from b->a
+
+The cost raster is isotropic, the plugin uses Dijkstra and Manhattan (Neumann) Neighborhood. There is a way independent from the plugin using SAGA, but we will not cover this here...
+
+]
+
+.pull-right[
+![:width 50%](images/traverse.png)
+![](images/isotropic_vs_anisogropic.jpg)
+.caption[Source: David Lewis; Ray/Ebener 2009
+]
+]
+---
+## Calculating walking time from a given start point
+
+### If you want to know, which points can be reached in what or a given time
+
+.pull-left[
+
+* calculates the walking time in any direction
+* if a maximum time is given, it is possible to determine the area reachable within this time
+* can be used to estimate a territory used by a settlement
+* can be based on terrain and other cost changing aspects (roads, barriers)
+
+.center[
+![:width 48%](images/Cost-Time-1.jpg)
+.caption[Comparison between 5 hour isochrones, with and without slope. Source: http://www.chrismapsthepast.com]
+]
+]
+
+.pull-right[
+![:width 48%](images/extent_model_example.png)
+.caption[Comparison between a Thiessen-Polygon and an Cost-Defined (XTENT) model of the territories of the Maya lowland. Source: Ducke/Kroefges 2007]
+]
+---
+## Calculating in QGIS - Prerequisists
+
+.pull-left[
+We need to utilize another GIS inside QGIS: GRASS.
+* There is a function r.walk that calculates walking time.
+* You can parameterise it for different Walking Cost functions, we work with the default (although it might be not optimal)
+* It expects a start point, an elevation model and a 'friction cost' layer
+  * With the friction cost you can introduce other costs beside the slope
+  * **This is not the cost layer we just calculated**
+  * To make our walking time only dependend on the slope, have to define a neutral raster layer containing only zeros (0)
+  * We can use the raster calculator for this
+]
+
+.pull-right[
+![](images/grass_logo.png)
+]
+---
+## Creating a empty (zero) layer
+
+.pull-left[
+* Start the raster calculator
+* Select the Slope layer as template
+* Write '0' in the 'Expression' pane
+* Specify the output file, name it eg. 'cost0'
+* Click on OK
+
+![](images/raster_calc_01.png)
+]
+
+.pull-right[
+ ![](images/calc_0_raster01.png)
+]
+---
+## Calculating in QGIS - Actual Calculation
+
+.pull-left[
+* Open the Toolbox ![](../09/images/toolbox_icon.png)
+* Search for 'r.walk' and open the 'r.walk.points' tool
+* Select DEM, cost0 and start layer
+* [you could define a stop point, where the maximum costs will be reached]
+* [you also can define the formula for the walking function. It defaults to Langmuir]
+* [in the advanced settings, you can specify using 'Kings move', it defaults to Manhattan move]
+* Click on Run
+
+.center[
+![:width 50%](images/rwalk01.png) 
+]]
+
+.pull-right[
+![](images/rwalk02.png)
+]
+---
+## r.walk results
+
+You get two resulting layers:
+* Movement directions contains the movement choosen for the calculation at each raster cell
+* More relevant is 'Accumulated Cost'
+  * Here, the raster holds the walking time to the pixel cell from the start point measured in seconds
+  * You can color this using pseudocolor, spectral, inverse
+
+.center[
+![:width 48%](images/rwalk_results01.png) ![:width 48%](images/rwalk_results02.png)
+.caption[left: movement directions; right: cumulative movement costs, colored with pseudocolor spectra, inverse]
+]
+
+---
+## Creating a Least Cost Path from the Accumulated Cost Surface
+
+We can use the Accumulated Cost Surface to calculate a Least Cost Path solution using the SAGA Least Cost Path tool
+
+* We have the costs from Bern
+* We need to calculate the path from Basel
+* Intuition: The algorithm treats the start as source of a river and lets this flow to the deepest point on the surface: the origin of the cost surface, that is Bern.
+
+---
+## Creating a Least Cost Path from the Accumulated Cost Surface - practically
+
+* Search in the toolbox for 'Least Cost Path' from SAGA
+* Click to open
+* Select the 'end'-layer as source
+* Select the Accumulated cost layer as Raster layer
+* Click on Run
+
+.center[
+![:width 40%](images/lcp_saga_01.png) ![:width 47%](images/lcp_saga_02.png)
+]
+
+---
+## SAGA Least Cost Path results
+
+You get two resulting layers:
+* A Vector Line Layer and Point layer both indicating the least cost path
+* The result might differ from the plugin path (different cost function).
+* r.walk is anisotropic, so the path from Bern to Basel might be a different one than the path from Basel to Bern
+* Which one is the best for archaeological interpretation? You need to decide!
+
+.center[
+![:width 48%](images/lcp_saga_result01.png) ![:width 48%](images/lcp_saga_result02.png)
+.caption[left: The result from the LCP Analysis from Bern -> Basel; right: Comparision between different algorithms and settings. .green[Green: The result from the plugin.] .blue[Blue: The result from SAGA Bern -> Basel.] .red[Red: The result from SAGA Basel -> Bern.]]
+]
+---
+## Least Cost Corridors
+
+A Least Cost Corridor does not identify a single most cost-efficient route between two starting points, but indicates the **area of the least common costs** between two points.
+
+That is, the lowest accumulative cost to reach starting point 1 **plus** the lowest accumulative cost to reach starting point 2 gives the total accumulative cost for a route that passes through a cell.
+
+Least cost corridors can be used instead of a single least cost path to connect two sites and get the **optimal corridor for interaction** instead of a single path.
+
+![](images/A-least-cost-path-analysis.png)
+.caption[Source: Rudnick et al. 2012.]
+
+---
+## Calculating Least Cost Corridors, Preparations
+
+### We need:
+
+* Two Accumulated Cost surfaces, one starting from each point
+* A threshhold to define inside and outside the corridor (we will determine that empirically)
+* A way to sum both surfaces up (this will be surprisingly straight forward)
+
+### So please:
+
+* Calculate a second Accumulated Cost Surface starting from Basel using r.walk
+
+---
+## Calculating Least Cost Corridors, Actual calculation
+
+* Open the Raster Calculator
+* Double click the first Accumulated Cost Surface
+* type '+'
+* Double click the second Accumulated Cost Surface
+* Select output file and check correct CRS
+* Click on OK
+
+![:width 59%](images/raster_calc_01.png) ![:width 39%](images/calc_sum_acc_costs.png)
+---
+## Calculating Least Cost Corridors, Visualisation
+
+* You should get a raster that combines the costs from both directions
+* You and visualise it very well with inverse spectral
+* You can also define a discrete threshold value (here eg. 71000)
+  * You might than like to multiply the layer on top of your DEM
+
+![:width 48%](images/viz_lcc01.png) ![:width 48%](images/viz_lcc02.png)
+.caption[Continuous and discrete visualisation of the Least Cost Corridor, here overlayed by the calculated Least Cost Paths.]
+
+---
+## Calculate the movement distance within a given time
+
+To get how far a pedestrian can walk in a given time, we can use the Contour tool, this time from SAGA:
+
+* here we can set maximum and minimum value for the contour line
+* the walking time is in seconds, so eg. 4 hours is equivalent with 4 x 60 x 60 = 14400 seconds
+
+.pull-left[
+
+* search for 'contour' in the Toolbox ![:width 5%](../09/images/toolbox_icon.png)
+* Click on 'Contour lines' tool from SAGA
+* Set 'Cumulative Costs' as layer
+* Set x,y as 'Support point type'
+* Set maximum and minimum to 14400
+* click on 'Run'
+
+.center[
+![:width 40%](images/contour01.png) 
+]]
+
+.pull-right[
+![](images/contour02.png)
+]
+
+---
+## Walking distance results
+
+* You should get a line showing the extent of a walking time of 5h
+* You can make it stick out more using Symbology (here: neon glow)
+* If you make the actual cost layer invisible, you can compare with the base map
+* In 4 hours I could get eg. to Kirchdorf
+* Compare with Google Maps: between 3h 50 min and 4h 10 min
+* or try it out yourself ;-)
+
+.center[
+![:width 48%](images/walking_distance_result01.png) ![:width 48%](images/walking_distance_result02.png)
+.caption[left: movement directions; right: cumulative movement costs, colored with pseudocolor spectra, inverse]
+]
+---
+## Site Catchment Analysis (SCA)
+
+.pull-left[
+* Used to estimate how many resources were available per (settlement) site within the catchment area
+* Practical approach:
+  * Defining the catchment area
+  * Defining indicators for resources
+  * Calculation of the available proportion/quantity
+* Typical surveyed factors:
+  * Soil types
+  * soil quality
+  * Slope inclination
+  * humidity
+  * (Climatic factors)
+]
+
+.pull-right[
+.center[
+![](images/site_catchment_neuchatel.png)
+]
+]
+---
+## SCA - Background
+
+.pull-left[
+* Probably managed/used space at a given distance from the site
+  * Ressources used differ in relation to distance
+  * Relative distance (in costs) might differ in relation to the topography
+* Basic idea: von Tünen
+* Size of the catchments derived from ethnographic data
+  * typical:
+    * close vicinity 1 km or 20 min walk: Horticulture or other high intensity activities
+    * medium vicinity 5 km or 1 h walk: agricultural fields 
+    * far vicinity 25 km or 1 day walk: extensive activities, eg. herding
+]
+
+.pull-right[
+.center[
+![](images/thuenen_model_topography.png)
+]
+
+
+]
+
+---
+## SCA - History and Application
+
+.pull-left[
+* first systematic application in archaeology: Vita-Finzi/Higgs 1970
+* landscape "reconstructions" give the opportunity to evaluate the economic potential of catchment
+* zonal approach
+* Catchments of different sites can be compared (-> site functions)
+* Does the catchment have enough potential to supply the site?
+]
+
+.pull-right[
+.center[
+![:width 80%](images/vita-finzi_higgs1970.png)
+.caption[Vita-Finzi/Higgs 1970]
+]
+]
+---
+## SCA - What do we need
+
+* an estimation of the catchment (we just did that)
+* data on ressources, which can come as
+  * Raster: DEM, Slope, Aspect, Distance to Water, ...
+  * Vector: Soil Types, Water Bodies, location of specific ressources, ...
+* **What we might get out**: Percentages of area with specific environmental values
+
+.center[
+![:width 60%](images/walking_1h.png)
+
+.caption[Catchment of 1h walk around Bern]
+]
+
+---
+## SCA - Preparation
+### Catchment as Polygon
+
+To use the walking distance border for extracting informations, we have to transform it into a polygon.
+
+.center[
+![:width 48%](images/line_to_polygon01.png) ![:width 48%](images/line_to_polygon02.png)
+]
+---
+## SCA - Vector Data
+
+Informations like soil types might come as vector (polygon) data. What we like to know is how many area is covered by the specific soil types (or other areas classified by attributes).
+
+Please download the soil [data for switzerland](data/boden_2056.zip) and add them to your map. The dataset is a simplified and reprojected version of what you can download from geo.admin.ch...
+
+The layer contains fields (columns) with multiple soil productivity parameters. We will use the 'Eignungsei', containing informations of suitability for different land uses.
+
+We need to:
+* cut to the extend of our catchment area
+* combine polygons according to soil suitability classes
+* calculate the size of the individual polygons
+* turn this into percentage of the total catchment area
+
+The last two steps can be done in one go in the attribute table
+
+---
+## SCA - Vector Data
+### Cut to extent
+
+Remember Geoprocessing tools?
+
+* Go to 'Vector > Geoprocessing tools > Intersection'
+* Select the soil layer as Input
+* Select the polygon as overlay
+* click on Run
+
+.center[
+![:width 48%](images/cut_vector_to_extent01.png) ![:width 48%](images/cut_vector_to_extent02.png)
+]
+---
+## SCA - Vector Data
+### Cut to extent Result
+
+You now have extracted the polygons according to the catchment area.
+
+We can remove the original layer 'boden_2056'.
+
+.center[
+![:width 48%](images/cut_vector_to_extent_03.png) ![:width 48%](images/cut_vector_to_extent_04.png)
+]
+---
+## SCA - Vector Data
+### Combine polygons according to classes
+
+Now we have to combine all polygons for the different suitability classes into one object. The attribute table will than have a row for every suitability class (Eignungsei)
+
+* Go to 'Vector > Geoprocessing tools > Dissolve'
+* Select the Intersection Layer
+* Select 'Fields to dissolve' and select 'Eignungsei'
+* Click on 'OK' and then on 'Run'
+
+.center[
+![:width 32%](images/dissolve_to_classes01.png) ![:width 33%](images/dissolve_to_classes02.png) ![:width 33%](images/dissolve_to_classes03.png)
+]
+
+---
+## SCA - Vector Data
+### Combination Result
+
+The result is a new layer. Please open the attribute table (Right click on the layer > Attribute table) to inspect the result.
+
+![](images/dissolve_to_classes04.png)
+
+From this result we can calculate the percentage on the total area
+
+---
+## SCA - Vector Data
+### Calculate percentage of area
+.pull-left[
+Stay in the attribute table, Click on the pencil icon ![](images/pencil_icon.png) to toggle edit mode.
+
+At first, we have to make a new column. Click on the 'Add column' icon ![](images/add_column_icon.png), and add a field for our percentage calculation, type should be 'real number'.
+]
+.pull-right[
+.center[
+![:width 60%](images/add_field_percentage.png)
+]]
+
+In the next and last step, Select the new field in the drop down to the upper left, and type the following formular:
+
+'$area/sum($area)*100'
+
+![](images/calculate_percentage_field.png)
+
+Then click on 'Update all'.
+
+---
+## SCA - Vector Data
+### Result
+![](images/calc_vector_area_result.png)
+
+The result shows the percentages of use classes on the area of our Catchment
+
+By far, 'Settlement' is dominating... Downside of working with modern days data. Get better suited or reconstructed if possible!
+---
+## SCA - Raster Data
+
+To assess the suitability, we can also use raster data. We might use the slope data from our DEM. Do you still know how to calculate this?
+
+'Raster > Analysis > Slope'
+
+We can cut the resulting Raster, like we did it for the vector data, but with a different tool.
+
+* 'Raster > Extraction > Crop Raster to Layer Mask'
+* Select the raster as input and the polygon layer as mask
+* Click on 'Run'
+
+.center[
+![:width 52%](images/cut_raster01.png) ![:width 46%](images/cut_raster02.png)
+]
+---
+## SCA - Raster Data
+### Result
+
+The difficulty with raster (continuous) data is, that they can take an infinite number of values. So either we represent them graphically, like inbuild, as histogram, or we have to reclassify them to a finite, small number of classes.
+
+(Histogram: Right click on the layer > Properties > Histogram)
+
+.center[
+![:width 48%](images/cut_raster03.png)
+]
+---
+## SCA - Raster Data
+### Reclassify
+
+We might want to reclassify according to the following table
+
+| Slope in degree | Suitability | numeric value |
+|-----------------|-------------|---------------|
+| 0-5             | Good        |       1       |
+| 5-10            | Fair        |       2       |
+| 10-15           | Bad         |       3       |
+| > 15            | Unsuitable  |       4       |
+
+We can use the 'Reclass by table' tool from the Toolbox ![](images/toolbox_icon.png) for this
+---
+## SCA - Raster Data
+### Reclassify practically
+
+* Select the tool from the toolbox (you might need to search for it)
+* Select the correct layer
+* Click on the ... at Classification Table
+* Add our classes
+* **Remember to set numeric values**
+* Click on 'OK' and 'Run'
+
+.center[
+![:width 32%](images/reclass01.png) ![:width 32%](images/reclass02.png)![:width 32%](images/reclass03.png)
+]
+---
+## SCA - Raster Data
+### Reclassification Results
+
+The result (in pseudocolor) can be seen below. Now we still have to calculate the percentage on the total area.
+
+For this, we can use again a tool from the Toolbox ![](images/toolbox_icon.png): 'Raster layer unique values report'
+
+.center[
+![:width 48%](images/reclass04.png) ![:width 48%](images/raster_unique_values01.png)
+]
+---
+## SCA - Raster Data
+.pull-left[
+### Reclassification calculate areas
+* Select Input Layer
+* Add Export of Table of Unique Values to Temp. File
+* Click on 'Run'
+* Open the Attribute Table of the new Table
+* Toggle Edit Mode ![](images/pencil_icon.png)
+* Add a decimal Field
+* Calculate the value of the field with:
+* m2 / sum(m2) * 100
+]
+.pull-right[![](images/raster_unique_values02.png)
+]
+
+![](images/raster_unique_values04.png)
+---
+## SCA - Result
+
+Now we have the tools to analyse the catchment of a site:
+
+* Determining the catchment by walking time
+* extract informations from underlying Raster and Vector Layers
+* Display the results numerically and as maps
+
+.center[
+![:width 48%](images/cut_vector_to_extent_04.png) ![:width 48%](images/reclass04.png)
+]
+![](images/raster_unique_values04.png)
+
+---
+# What We've Covered
+--
+
++ Creating a cumulative cost (walking time) layer
+--
+
++ Calculation of Least Cost Corridors
+--
+
++ Estimation of walking distance in a given time
+--
+
++ Creating a Catchment area from walking time
+--
+
++ Extracting Catchment data from Raster and Polygon Data
+--
+
+---
+## More on Site Catchment Analysis
+
+.pull-left[
+Volkmann A. (2018) Methods and Perspectives of Geoarchaelogical Site Catchment Analysis: Identification of Palaeoclimate Indicators in the Oder Region from the Iron to Middle Ages. In: Siart C., Forbriger M., Bubenzer O. (eds) Digital Geoarchaeology. Natural Science in Archaeology. Springer, Cham. https://doi.org/10.1007/978-3-319-25316-9_3
+
+Free available from within the university network.
+
+other chapters of the book might be interesting, too...
+]
+
+.pull-right[
+![:width 90%](images/978-3-319-25316-9.jpg)
+]
+
+---
+
+# Homework
+
+* Select a locations of your choice (in Switzerland or the world)
+* Get the DEM from SRTM
+* Calculate the 1h Catchment
+* Evaluate a parameter of your choice in terms of the percentage of the catchment (slope is probably the easiest...)
+* Send me a screenshot
 
 ---
 class: inverse, middle, center
 # Any questions?
+
+![:width 25%](images/unnamed.jpg)
+
+.caption[Source: https://www.blog.tirol]
 
 .footnote[
 .right[
