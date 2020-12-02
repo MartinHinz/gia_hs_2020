@@ -55,10 +55,10 @@ cat(rmarkdown::metadata$date)
 - [08\. Session: Making nicer Maps](08) | 04/11/20
 - [09\. Session: Terrain Data](09) | 11/11/20
 - [10\. Session: Least Cost Path Analysis](10) | 18/11/20
-- [11\. Session: Time Distance and Site Catchment Analysis](11) | 25/11/20
-- [12\. Session: Visibility Analysis](12) | 02/12/20
-- [13\. Session: Kriging](13) | 09/12/20
-- [14\. Session: Predictive Mapping](14) | 16/12/20
+- [11\. Session: Time Distance](11) | 25/11/20
+- [12\. Session: Site Catchment Analysis](12) | 02/12/20
+- [13\. Session: Visibility Analysis](13) | 09/12/20
+- [14\. Session: Kriging](14) | 16/12/20
 ]
 
 .tiny[
