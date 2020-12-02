@@ -54,8 +54,9 @@ cat(rmarkdown::metadata$date)
 
 You might need to download the following data, if you do not have them on your PC right now:
 * [SRTM DEM of Switzerland in EPSG 2056](data/srtm_2056_cut.tif)
-* the [Accumulated Cost Raster from Bern](data/accum_cost_bern.tif), walking time calculated with r.walk.points
+* [Accumulated Cost Raster from Bern](data/accum_cost_bern.tif), walking time calculated with r.walk.points
 
+Please **right click** and **save at** a location of your choice!
 ---
 # A small repetition
 ---
@@ -131,7 +132,7 @@ To get how far a pedestrian can walk in a given time, we can use the Contour too
 
 * search for 'contour' in the Toolbox ![:width 5%](../09/images/toolbox_icon.png)
 * Click on 'Contour lines' tool from SAGA
-* Set 'Cumulative Costs' as layer
+* Set 'accum_cost_bern' as layer
 * Set x,y as 'Support point type'
 * Set maximum and minimum to **3600**
 * click on 'Run'
