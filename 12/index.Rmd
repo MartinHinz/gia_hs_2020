@@ -1,6 +1,6 @@
 ---
 title: "GIS in Archaeology"
-subtitle: "12 - Least Cost Path Analysis"
+subtitle: "12 - Site Catchment Analysis"
 author: "Martin Hinz"
 institute: "Institut für Archäologische Wissenschaften, Universität Bern"
 fontsize: 9pt
@@ -49,6 +49,13 @@ cat('#### ', rmarkdown::metadata$institute)
 cat(rmarkdown::metadata$date)
 ```
 
+.footnote[
+.right[
+.tiny[
+You can download a [pdf of this presentation](gis_in_archaeology_12.pdf).
+]
+]
+]
 ---
 # Before we start:
 
