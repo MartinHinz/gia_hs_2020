@@ -1,6 +1,6 @@
 ---
 title: "GIS in Archaeology"
-subtitle: "13 - Kriging"
+subtitle: "13 - Visibility Analysis"
 author: "Martin Hinz"
 institute: "Institut für Archäologische Wissenschaften, Universität Bern"
 fontsize: 9pt
@@ -51,6 +51,59 @@ cat(rmarkdown::metadata$date)
 
 ---
 ## Content yet to come
+
+Sehen ist einer der primären Sinne des Menschen, da- her ist Sichtbarkeit auch ein relevanter Faktor bei der Interpretation menschlicher Verhaltensweisen. So ist Sichtbarkeit die Basis grundlegender Wahrneh- mungs- und Orientierungsaspekte, die einen direk- ten Bezug zu landschaftsarchäologischen Fragestel- lungen haben.
+
+Um in einem geographischen Informationssystem Sichtbarkeitsanalysen durchführen zu können, wer- den verschiedene Informationen benötigt. Zunächst
+einmal ist die Grundlage der Analysen ein möglichst detailliertes digitales Geländemodell.8 Im GIS wird im Rahmen einer Sichtlinienanalyse daraus berech- net, ob mindestens einer der Punkte des Gelände- modells zwischen dem Ausgangs- oder Beobach- tungspunkt und dem End- oder Zielpunkt liegt. Da digitale Geländemodelle naturgemäß die enthaltenen Höheninformationen nicht als stetige Werte vorhal- ten,sondernalsdiskretisierte,d.h.abgestufteWerte, ergeben sich minimale Abweichungen, die aber in der Praxis bei einer möglichst großen Auflösung des Rastergrids und einer feinen Abstufung der Höhen- informationen zu vernachlässigen sind (Abb. 1).
+
+Entscheidend sind zusätzliche Angaben zur Höhe des Beobachters (Körperhöhe, gegebenenfalls Diffe- renz durch rückgerechnete Geländeerosion, evtl. Höhe eines erhöhten Standpunkts, z.B. auf einer Mauer) und zur Höhe des zu beobachtenden Ob- jektes (z. B. Grabhügelhöhe). Verschiedene andere Werte bezüglich des Azimuths und des Radius des zu betrachtenden Geländeausschnittes sind meist von eher untergeordneter Bedeutung.
+
+
+Geht man vom einfachsten Fall des Sehens und Er- kennens aus, dann ist die Sichtbarkeit eines Objektes, z. B. eines Grabhügels von einer bestimmten Position, wie von einer Siedlung aus, der klassische Fall einer Sichtlinienanalyse, im GIS meist mit „line of sight“ bezeichnet. Entscheidende Faktoren sind dabei – wie immer neben der Qualität des zur Verfügung stehen- den Geländemodells – vor allem die Wahl des Stand- punktes des Beobachters sowie die Wahl bzw. Anga- be der Höhe des zu beobachtenden Objektes.
+
+Sichtbereiche, sog. viewsheds sind ein weiterer wich- tiger Anwendungsbereich der Sichtbarkeitsanalysen. Reflexive Viewsheds geben wieder, von wie vielen Punkten ein anderer Punkt im Gelände aus sichtbar ist, in der archäologischen Praxis also ob eine Fund- stelle in einer gut sichtbaren oder einer versteckten Geländesituation angelegt worden ist. Ein Beispiel wäre die Sichtbarkeit eines „Fürstensitzes“ oder eines „Fürstengrabes“ innerhalb der sie umgebenden Landschaft.
+
+Projective Viewsheds analysieren, wie viele Punkte von einem definierten Punkt im Gelände aus sicht- bar sind, d.h. ob eine Fundstelle geeignet ist, be- stimmte Landschaftsteile zu überblicken bzw. gege- benenfalls zu kontrollieren.
+
+Cumulative Viewsheds (reflexive oder projective) untersuchen die Sichtbarkeit von mehreren bzw. von allen potentiellen Stand- bzw. Beobachtungspunk- ten aus; sie dienen der Beurteilung einer Landschaft und der in ihr enthaltenen anthropogenen Hinter- lassenschaften. Als Beispiel sei die Einsehbarkeit der Landschaft zu einem bestimmten Zeitraum, z. B. von allen Siedlungen der Späthallstattzeit aus genannt.
+
+
+Arten der Sichbarkeit
+- Sichtbarkeit eines Punktes aus der Landschaft
+- Sichtbarkeit der Landschaft von einem Punkt aus
+- Intervisibility
+- Total Visibility Index
+
+The popularity of the usage of Geographical Information Systems (GIS) to analyse and explore past landscapes has grown rapidly over the last few decades. The purpose of visibility analysis in landscape archaeology is to explore the visual organisation of features across a landscape (Kay and Sly, 2001). Visibility is of major importance to how humans relate to and interpret the landscape. People often describe a place based on the visibility (Wheatley and Gillings, 2001). Visibility analysis is therefore an important element in the interpretation of the landscape for understanding past societies. Visibility analyses can help analyse the spatial distribution of features in the landscape or help answer the question why a particular site was in a particular place (Wheatley and Gillings, 2001).
+
+The most common viewshed analysis is the binary viewshed analysis. The output is a raster that shows the cells that are visible and cells that are not visible from one or more viewpoints. The raster is created by producing a line-of-sight analysis from the viewpoint to each cell in the height input model; a Digital Elevation Model (DEM). Cells that are not blocked by elevation heights of other cells are classified as visible and are assigned the value ‘1’. All other cells are invisible and are assigned the value ‘0’.
+
+Visibility analysis is complex. Wheatley and Gillings (2000) classify the issues relating to visibility analysis into three categories:
+ Pragmatic - pragmatic issues are those which apply to both GIS and non-GIS based visibility studies
+e.g. vegetation, human perception and temporal changes
+ Procedural – procedural issues refer to concerns that arise as a product of using GIS for visibility analysis
+e.g. DEM accuracy and the undifferentiated nature of the viewshed (binary output)
+ Theoretical – theoretical issues are those which arise from debates in the humanities (e.g. geography)
+
+Non-GIS Visibility Studies
+
+GIS Visibility Studies
+
+Vegetation
+
+It aims to explore substantively the relationships of visibility and intervisibility between particular archaeological locations in the landscape. Contrary to popular belief, this kind of analysis pre-dates GIS by at least two decades, with both formal studies such as Renfrew and Fraser's work on Orkney (Fraser 1983; Renfrew 1979) and anecdotal discussions about visual impressiveness or placement of monuments.
+
+Hohenasberg
+48.910278°, 9.138333°
+
+Kleinaspergle
+48.89739°, 9.142977°
+
+Hochdorf Keltischer Fürstengrabhügel
+48.888833°, 9.009611°
+
+
 
 ---
 class: inverse, middle, center
