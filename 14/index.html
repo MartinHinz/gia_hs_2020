@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>GIS in Archaeology</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Hinz" />
+    <link rel="stylesheet" href="../libs/default.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/default-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/customize.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide, center, middle
+
+
+#  GIS in Archaeology
+
+##  14 - Batch Processing and Automation
+
+###  Martin Hinz
+
+####  Institut für Archäologische Wissenschaften, Universität Bern
+
+16/12/20
+
+---
+## Batch Processing and Automation
+
+Quite often, GIS Tasks do not involve only one processing step for one dataset:
+
+* Often, multiple files have to be processed the same way
+* or, processing might involve multiple steps, that you might like to redo for several datasets
+
+Two tools in QGIS might help in these situations:
+
+* Batch Processing
+* the Processing Modeler
+
+---
+## Batch Processing
+
+.pull-left[
+* production of a "batch" of multiple items at once, one stage at a time
+
+Typical tasks in general:
+
+* Performing bulk operations on digital images such as resizing, conversion, watermarking, or otherwise editing a group of image files.
+* Converting computer files from one format to another
+
+Use cases in GIS:
+* if the same tool has to be applied to different layers
+* typically, all layers have to be of the same kind (raster or vector)
+]
+
+.pull-right[
+![](images/batch.png)
+.caption[Batch Processing of multiple items with the same algorithm. Source: https://hazelcast.com]
+]
+
+---
+## Batch Processing
+### Example: Crop Vector Files to the same extend
+
+.pull-left[
+Remember the session on making a basemap from scratch?
+
+We used Rivers and Lakes from the geo.admin.ch portal, already croped to Switzerland.
+
+to achieve this with the Natural Earth datasets, we need to load:
+
+* the [worldwide rivers](data/ne_10m_rivers_lake_centerlines.zip) and the [european supplement](data/ne_10m_rivers_europe.zip) data
+* the [worldwide lakes](data/ne_10m_lakes.zip) and the [european supplement](data/ne_10m_lakes_europe.zip) data
+]
+
+.pull-right[
+![](images/map_intermediate.png)
+]
+
+Than we have to crop 4 Layers to the [extend of Switzerland](data/schweiz.zip).
+
+**Please load all the data and add them to a new QGIS Project!**
+---
+## Batch Processing
+### Example: Crop Vector Files to the same extend
+
+This involve **four** times the same operation: cropping the layer to the extend of Switzerland
+
+
+![](images/crop_individual.png)
+
+With Batch processing, we can do this in one run
+
+---
+## Batch Processing
+### Example: Crop Vector Files to the same extend
+.pull-left[
+* If not already there, please open the Toolbox ![](../06/images/toolbox_icon.png)
+* Search for Crop (Zuschneiden)
+* Right Click on the tool and select 'Execute as Batch Process' ('Als Stapelprozess ausführen')
+
+Next step is to select the source
+
+* Click on 'Autofill', and select 'From Open Layers'
+* Select all layers, that the operation should apply to, and click on OK
+]
+
+.pull-right[
+![](images/batch_crop01.png)
+![](images/batch_crop02.png)
+]
+
+---
+## Batch Processing
+### Example: Crop Vector Files to the same extend
+.pull-left[
+The next step is to select the parameters. This might look different in different tools. For Crop, we have only to select the overlay layer.
+
+* In the first row, select the switzerland-layer as overlay
+* Click on Autofill, and select 'Fill down'
+* Right Click on the tool and select 'Execute as Batch Process' ('Als Stapelprozess ausführen')
+]
+
+.pull-right[
+![](images/batch_crop04.png)
+]
+---
+## Batch Processing
+### Example: Crop Vector Files to the same extend
+
+.pull-left[
+Finally, we have to select the storage location of the processed files
+
+* In the first row, click in the column 'Cropped' on the three dots (...)
+* In the file dialog, select the correct folder, and write as filename only 'clipped_'
+  * this will be prepended to all file names
+* Click on 'Save', a new window will appear with the autofill-settings
+* Select 'Fill with Parameter values' as Autofill mode and 'Input layer' as 'Parameter to use'
+]
+
+.pull-right[
+![](images/batch_crop05.png)
+![](images/batch_crop06.png)
+]
+---
+## Batch Processing
+### Example: Crop Vector Files to the same extend
+
+.pull-left[
+Now we are good to go. Make sure to check 'Load Layers on completion'. The resulting window should look like the one on this slide
+
+Click on 'Run', now all the layers should be processed with the same algorithm at once.
+
+The result should be four layers, cropped to switzerland, in one go.
+]
+
+.pull-right[
+![](images/batch_crop07.png)
+![](images/batch_crop08.png)
+]
+---
+## GeoPackage
+.pull-left[
+Until now, we worked with zipfiles for moving around shapefile-layers. There is a more convenient way to do this, that is also supported by ArcGIS and other software: GeoPackage.
+
+&gt; A GeoPackage (GPKG) is an open, non-proprietary, platform-independent and standards-based data format for geographic information system implemented as a SQLite database container. Defined by the Open Geospatial Consortium (OGC) with the backing of the US military and published in 2014, GeoPackage has seen wide widespread support from various government, commercial, and open source organizations. - wikipedia
+] 
+.pull-right[
+![](images/geopkg.png)
+.caption[Source:https://www.geopackage.org]
+] 
+---
+## Packing files into an GeoPackage
+.pull-left[
+* If not already there, please open the Toolbox ![](../06/images/toolbox_icon.png)
+* Search for 'pack', and select the 'Package layers' ('Layer verpacken') tool
+* In the dialog, select the three dots for Input Layer
+* Select all layers that should be part of the GeoPackage and click on OK
+* Select the location and name of the GeoPackage as Destination
+* Click on Run
+* In your filesystem there should be a new file that holds all layers, which now can be transfered imported into QGIS (or other GIS) at once
+]
+
+.pull-right[
+![](images/geopackage01.png)
+![](images/geopackage02.png)
+
+] 
+
+---
+## Automating Complex Workflows using Processing Modeler
+.pull-left[
+* GIS Workflows typically involve many steps
+* the intermediate output of one process is often the input of the next
+* changing input data or parameters make it necessary to run through the entire process again
+* the graphical modeler of QGIS helps to define workflows that can be run with a single invocation
+* these workflows can also run as batch processing over a large number of inputs
+]
+
+.pull-right[
+![](images/modeler-min.png)
+.caption[Example of an automated QGIS workflow. Source: https://north-road.com]
+]
+---
+## Automating Site Catchment calculation
+
+Remember calculating Site Catchments? This involved the following steps:
+
+Input data: [DEM](data/srtm_2056_cut.tif) and [site point vector layer](data/start.zip)
+
+(**Please download the layers and extract (!) the vector Layer**)
+
+1. Calculating the friction cost layer with 0 additional costs
+2. Calculating the walking time surface layer using r.walk.points from GRASS
+3. Calculating the 1h walking time extend using the Contour Lines tool from SAGA
+4. Converting the resulting line to a polygon representing the 1h catchment
+
+.center[
+![:width 48%](../10/images/prepare_raster01.png) ![:width 48%](../11/images/cut_vector_to_extent_04.png)
+] .caption[From DEM and site to Catchment is a long way with several steps!]
+
+---
+## Automating Site Catchment calculation
+### using the Processing Modeler
+
+First, make a new QGIS Project and add the DEM and the site layer (the extracted shp-file) to your project.
+
+Than, start the Processing Modeler tool.
+
+![](images/start_proc_mod.png)
+---
+## Automating Site Catchment calculation
+### using the Processing Modeler
+
+.pull-left[
+Here, we define the workflow and the interdependencies of the different processing steps. At first we have to define the input data. We use entities to represent our real data. We start with the raster file.
+
+* Select in the 'Input pane' the option 'Raster layer'
+* Name it 'DEM', because it will represent whatever DEM the user will later add as input data
+* the checkbox for 'mandatory' is already checked. We definitely will need a raster input, so we leave it checked.
+]
+
+.pull-right[
+![:width 80%](images/proc_model_add_raster01.png)
+![:width 40%](images/proc_model_add_raster02.png)
+]
+---
+## Automating Site Catchment calculation
+### using the Processing Modeler
+
+.pull-left[
+Next, we do the same with the vector input layer for the site layer.
+
+* Select in the 'Input pane' the option 'Vector layer'
+* Name it 'Site', because it will represent whatever site layer the user will later add as input data
+* Select 'Point' as geometry type, since only point data are meaningful here
+* the checkbox for 'mandatory' is already checked. We definitely will need a raster input, so we leave it checked.
+
+After clicking OK, your window should look like the one on the right -&gt; 
+]
+
+.pull-right[
+![:width 49%](images/proc_mod_input_vector01.png)
+![:width 47%](images/proc_mod_input_vector02.png)
+![](images/proc_mod_input_vector03.png)
+
+]
+
+---
+### using the Processing Modeler
+
+.pull-left[
+Next, we add our first algorithm. Here we calculate the friction cost layer, that should hold only 0 in each cell. We use the raster calculator.
+
+* Switch from Inputs to Algorithms
+* Search for 'Rastercalculator' and double click it to open
+* rename it 'calculate 0 raster'
+* in the 'Expression' pane enter 'DEM@1 - DEM@1' (to calculate 0)
+* Click on the drop down field in from of 'Reference layer' and select 'Model input', than select the DEM in the right drop down field
+* Click on OK
+]
+
+.pull-right[
+![:width 40%](images/proc_mod_raster_calc01.png)
+![](images/proc_mod_raster_calc02.png)
+]
+---
+## Automating Site Catchment calculation
+### using the Processing Modeler
+
+.pull-left[
+Your Model Window should now look like this:
+
+* a small line connects the input DEM with the first algorithm
+]
+.pull-right[
+![](images/proc_mod_raster_calc03.png)
+]
+---
+## Automating Site Catchment calculation
+### using the Processing Modeler
+
+Next step is to run r.walk.points
+
+* Search under Algorithms for that tool and double click it
+* For the Elevation Raster, select 'Model Input' and 'DEM'
+* For the Friction Cost Raster ('Reibungskosten') select 'Algorithm Output' and 'calculate 0 raster'
+* For the Start point, select 'Model Input' and 'Site'
+* Click on 'OK'
+
+![](images/proc_mod_rwalkpoints.png)
+---
+## Automating Site Catchment calculation
+### using the Processing Modeler
+
+.pull-left[
+Your Model Window should now look like this:
+
+* a small line connects the input DEM with the first algorithm
+* three small lines connect r.walk.points with all the inputs it gets from the input layers and the calculation of the raster with 0 friction costs
+]
+.pull-right[
+![](images/proc_mod_rwalkpoints_res.png)
+]
+---
+## Automating Site Catchment calculation
+### using the Processing Modeler
+
+Next, we calculate the 1h (3600 seconds) Contour using the SAGA GIS Contour tool
+
+* Seach for contour and double click the SAGA tool 'Contour Lines'
+* As Raster, select 'Algorithm Output' and 'Cumulative Costs from Algorithm "r.walk.points"'
+* As 'Support point type' select 'x,y'
+* Set Minimum and Maximum to 3600 (= 1h)
+* Click on OK
+
+![](images/proc_mod_contour.png)
+---
+## Automating Site Catchment calculation
+### using the Processing Modeler
+
+As last step, we convert the resulting line layer to a polygon layer
+
+* Search for 'Lines to Polygon' and double click the tool
+* Select 'Contour Lines from algorithm "Contour Lines"' as input
+* **This time, write 'Catchment' as the name of the resulting layer. This will produce an output layer that than can be added to the map**
+* Click on OK
+
+![](images/proc_mod_l2p.png)
+---
+Your Final Model should look like this:
+
+![](images/proc_mod_final_model.png)
+You now name the model eg. 'Site Catchment', click on the Save icon and save it eg. as 'catchment'. Do not change the location suggested, it is the standard location where QGIS will find the model (workflow) again.
+
+Than you can close the window.
+---
+## Automating Site Catchment calculation
+### using the Processing Modeler
+.pull-left[
+In the toolbox, you will find now 'Models' as an option, and beneath it, your 'Site Catchment' model.
+
+Click to run!
+]
+
+.pull-right[
+![:width 65%](images/proc_mod_saved_model.png)
+]
+---
+## Automating Site Catchment calculation
+### using the Processing Modeler
+
+.pull-left[
+* Select the 'srtm_2056_cut' layer as DEM
+* Select the 'start' layer as Site
+* Click on 'Run'
+
+Now, the whole workflow will be executed in one go. If you change the input layers, you easily and fast can recalculate catchments for different sites!
+]
+
+.pull-right[
+![:width 50%](images/proc_mod_run01.png)
+]
+
+![:width 50%](images/proc_mod_run02.png)
+---
+# What We've Covered
+--
+
++ Batch Processing of one algorithm applied on multiple layers
+--
+
++ Exporting GeoPackages
+--
+
++ Creating Workflows (Models) to easily repeat multiple processing steps
+---
+# Course Feedback
+
+---
+class: inverse, middle, center
+# Any questions?
+
+![:width 25%](images/37657829._SX318_.jpg)
+
+.caption[Find more Sad Topographies at Sad Topographies...]
+
+.footnote[
+.right[
+.tiny[
+You might find the course material (including the presentations) at
+
+https://github.com/MartinHinz/gia_hs_2020
+
+You can see the rendered presentations at
+
+http://martinhinz.github.io/gia_hs_2020
+
+You can contact me at
+
+&lt;a href="mailto:martin.hinz@iaw.unibe.ch"&gt;martin.hinz@iaw.unibe.ch&lt;/a&gt;
+]
+]
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../libs/remark-latest.min.js"></script>
+<script src="../libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"fig_caption": true,
+"ratio": "16:10"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
