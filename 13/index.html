@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>GIS in Archaeology</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Hinz" />
+    <meta name="date" content="2020-09-12" />
+    <link rel="stylesheet" href="../libs/default.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/default-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/customize.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide, center, middle
+
+
+#  GIS in Archaeology
+
+##  13 - Visibility Analysis
+
+###  Martin Hinz
+
+####  Institut für Archäologische Wissenschaften, Universität Bern
+
+09/12/20
+.footnote[
+.right[
+.tiny[
+You can download a [pdf of this presentation](gis_in_archaeology13.pdf).
+]
+]
+]
+
+---
+## Before we start
+
+Some had problems last time with:
+
+* path names containing spaces:
+  * make sure that while working with SAGA and GRASS that there are no spaces in the paths to your data
+* zipped shapefiles
+  * this time, everything should be possible without unzipping. But in general, you are more safe if you unzip the files and import them that way
+  
+---
+## What is Visibility Analysis
+
+.pull-left[
+- determines which areas are visible from a certain point or - vice versa - from where a certain point or object can be seen.
+- are based on the evaluation of elevation data in a digital terrain or elevation model (DEM)
+- are particularly used in many approval procedures, for example in the planning of waste disposal sites, wind farms or freeway routes
+]
+
+.pull-right[
+![](images/visibilityanalysis2_0.jpg)
+.caption[Application of Visibility Analysis. Source: https://www.cloudeo.group/visibility-analysis]
+]
+---
+## Why Visibility Analysis
+
+.pull-left[
+- Vision is one of the primary human senses
+- therefore visibility is also a relevant factor in the interpretation of human behavior
+- Visibility is
+  - the basis of fundamental aspects of perception and orientation
+  - of major importance to how humans relate to and interpret the landscape
+- People often describe a place based on the visibility
+- Visibility analysis is therefore an important element in the interpretation of the landscape for understanding past societies
+]
+
+.pull-right[
+![](images/ViewDome2.jpg)
+.caption[Visibility analysis in modern city planning. Source: https://www.esri.com]
+
+]
+
+---
+## Visibility Analysis in Archaeology
+
+.pull-left[
+- explores the relationships of visibility and intervisibility between particular archaeological locations in the landscape
+- can help analyse the spatial distribution of features in the landscape or help answer the question why a particular site was in a particular place
+- certain sites might have been placed explicitly with vision in mind:
+  - monuments
+  - fortifications and watchtowers
+  - ritual sites
+  - hidden sites
+- some interlinkage between sites may be made more plausible by intervisibility
+  - eg. settlements and burial sites
+]
+
+.pull-right[
+![](images/image005.gif)
+.caption[Example of a binary viewshed analysis. Source: Murphy 2016]
+]
+---
+## Visibility Analysis without GIS
+
+.pull-left[
+- visibility analysis pre-dates GIS by at least two decades
+- both formal studies (eg. Renfrew 1979) and anecdotal discussions about visual impressiveness or placement of monuments (eg. Devereux 1991)
+- without a GIS difficult to produce and also to reproduce:
+  - subjectivity of vision
+]
+
+.pull-right[
+.center[
+![:width 80%](images/renfrew_1979.png)
+![:width 80%](images/devereux1991_fig_1.png)
+.caption[Example of an Visibility Analysis without GIS. Source: Renfrew 1979, Devereux 1991]
+]
+]
+---
+## Visibility Analysis with GIS
+
+.pull-left[
+- Since widespread adoption in the 1990s GIS have increasingly been employed
+- allow the user to 
+  - map the field-of-view from given viewpoint
+  - determine lines of sight between locations
+- viewshed has become a routine method in landscape archaeology
+- crude in its basic application
+  - simple binary map of zones in or out-of-view
+- finessed through an on-going process
+  - manipulation of view angles and parameters
+  - fuzziness
+  - visual acuity
+  - visual prominence
+  - horizon delineation
+  - 3D visibility modelling
+]
+
+.pull-right[
+![](images/5__Viewshed_lake.jpg)
+.caption[Viewshed from Lake Neuchâtel with megaliths and lakeshore sites. Source: http://giannalogy.blogspot.com]
+]
+---
+## Flavours of Visibility Analysis
+.pull-left[
+- Visibility of the landscape from one point
+- Visibility of a point from the landscape
+- Intervisibility between two or more points
+- Cumulative Viewshed
+  - viewsheds from multiple points combined
+- Total Visibility Index (i.e.: Total Viewshed)
+  - viewshed from all points in the landscape combined
+- ...
+![](images/2020-03-15-views.png)
+
+]
+.pull-right[
+![](images/20-05-01-direction.png)
+.caption[Visibility is not reciprocal. Source: https://landscapearchaeology.org]
+]
+---
+## Prerequisites
+
+.pull-left[
+- Observers point(s)
+  - [Hohenasberg](data/hohenasberg_epsg_32632.zip) - an Iron Age hill site
+- Target point(s)
+  - [Iron Age Burial Mounds](data/burial_mounds_epsg_32632.zip)
+    - (Hochdorf, Hirschlanden, Kleinaspergle)
+- DEM
+  - [DEM of the region around the Hohenasberg](data/aster_dem_32632.tif)
+- a visibility analysis tool
+
+**Download all layers and add them to the map.**
+]
+
+.pull-right[
+![](images/map_location.png)
+.caption[The working area. .green[Green: Hochdorf]. .red[Red: Iron Age Burial Mounds and Hohenasberg]. Background Map Positron by CartoDB.]
+]
+---
+## Install the Plugin
+
+- Go to 'Extensions &gt; Manage and Install Extensions'
+- Search for 'Visibility Analysis'
+- Click on Install
+
+.center[
+![:width 48%](images/inst_visibility_plugin01.png) ![:width 48%](images/inst_visibility_plugin02.png)
+]
+---
+## Viewshed from the Hohenasberg
+### Creating Viewpoint
+
+.pull-left[
+At first, we will calculate the visible area from the Hohenasberg. To do so, we have to specify the observer location.
+
+* Open the toolbox ![](../06/images/toolbox_icon.png)
+* Select 'Create viewpoints' from 'Visibility Analysis &gt; Create viewpoints'
+* Select 'hohenasberg' as Observer location
+* Select 'aster_dem' as dem
+* Specify 20000 m as radius of analysis
+* you can specify an observer height different from 1.6 m, but we will not do it
+* click on 'Run'
+* You get a new layer, 'Output layer'. You might like to rename it to 'Viewpoint Hohenasberg'
+]
+.pull-right[
+.center[
+![:width 48%](images/observer_point_01.png)
+![](images/observer_point_02.png)
+]
+]
+---
+## Viewshed from the Hohenasberg
+### Calculating Viewshed
+
+.pull-left[
+* Select 'Viewshed' from 'Visibility Analysis &gt; Analyse'
+* Binary Viewshed is selected
+  * other options are described in the box to the right
+* Select the Viewpoint Hohenasberg as Observer location
+* Select the aster_dem as DEM
+* You could include the earths curvature (if you not belief in the flat earth)
+* Click on Run
+
+]
+.pull-right[
+.center[
+![:width 48%](images/viewshed01.png)
+![](images/viewshed02.png)
+]
+]
+---
+## Viewshed from the Hohenasberg
+### Calculating Viewshed
+
+
+* The result is a black and white image
+  * black: not visible
+  * white: visible
+* You can improve the visualisation with transparency
+* You can check if the burial mounds would be visible
+  * **[keep in mind, that we selected heigth of 0, and observer heigth of 1.6]**
+
+.center[
+![:width 48%](images/viewshed03.png)
+![:width 48%](images/viewshed04.png)
+.caption[Result of the viewshed analysis from the Hohenasberg. Left: original result; Right: 33% Opacity.]
+]
+
+---
+## Visibility of the burial mounds
+### Reciprocal Visibility
+
+.pull-left[
+Line of Sight works in two ways. So what can be seen by an observer generally can also see the observer.
+
+**But:**
+
+The burial mounds are prominent themself. Their actual height might not be reflected in the (rather unprecise) DEM.
+
+Also, the person on the Hohenasberg might be on an elevated position (eg. a rampart).
+
+Lets assume the burial mounds where 6 m height. Lets repeat the procedure with an changed observer and target heigth.
+]
+
+.pull-right[
+![](images/19-04-towers.jpg)
+.caption[The problem of reciprocity. Source: https://landscapearchaeology.org, modified.]
+]
+---
+## Visibility of the burial mounds
+### Creating a new Viewpoint layer
+.pull-left[
+* Select 'Create viewpoints' from 'Visibility Analysis &gt; Create viewpoints'
+* Select 'hohenasberg' as Observer location
+* Select 'aster_dem' as dem
+* Specify 20000 m as radius of analysis
+* Select 3.6 m as observer height
+* Select 6 m as target height
+* Click on Run
+
+* You get a new layer, 'Output layer'. You might like to rename it to 'Viewpoint Hohenasberg elevated'
+
+* Repeat the viewshed analysis with the new observer location
+]
+.pull-right[
+.center[
+![:width 48%](images/observer_point_01.png)
+![](images/viewshed_mounds02.png)
+]
+]
+---
+## Visibility of the burial mounds
+### Result
+
+
+* The result is a raster with more white (=visibile area) than before
+* Compare with the visible area before
+* You can check if the burial mounds would be visible now
+  * [Kleinaspergle and Hochdorf would be visible, Hirschlanden not]
+
+.center[
+![:width 48%](images/viewshed03.png)
+![:width 48%](images/viewshed_mounds03.png)
+.caption[Result of the viewshed analysis from the Hohenasberg. Left: observer 1.6 m to ground; Right: observer 1.6 m to target 6 m.]
+]
+---
+## What can be seen from the burial mounds
+### aka Cumulative Viewshed
+
+.pull-left[
+We can combine multiple observation points in one analysis to calculate the total area that can be seen by any of the observers, rsp. how good an area can be observed by any of them.
+
+We will try this out with the burial mounds
+
+(admittedly, this does not make so much sense archaeologically, but think of the burial mounds as Roman Limes watchtowers)
+]
+
+.pull-right[
+![](images/lewis_2020.png)
+.caption[Source: Lewis 2020]
+]
+---
+## What can be seen from the burial mounds
+### Viewpoints
+
+.pull-left[
+* Select 'Create viewpoints' from 'Visibility Analysis &gt; Create viewpoints'
+* Select 'burial_mounds' as Observer location
+* Select 'aster_dem' as dem
+* Specify 20000 m as radius of analysis
+* Select 6 m as observer height
+* Select 0 m as target height
+* Click on Run
+
+* You get a new layer, 'Output layer'. You might like to rename it to 'Viewpoint Burial Mounds'
+
+* Repeat the viewshed analysis with the new observer location
+]
+.pull-right[
+.center[
+![:width 48%](images/observer_point_01.png)
+![](images/cum_viewshed01.png)
+]
+]
+---
+## Visibility of the burial mounds
+### Result
+
+
+* The result is a raster, where more white means visible from more locations (up to 2 here).
+* You can use pseudocolor and transparency to make the result more appealing.
+
+.center[
+![:width 48%](images/cum_viewshed02.png)
+![:width 48%](images/cum_viewshed03.png)
+.caption[Result of the cumulative viewshed analysis from the Burial mounds. Left: original result; Right: styled using pseudocolor and transparency. .red[Red] mean, visible by two mounds.]
+]
+---
+## Making intervisibility more obvious
+### aka Intervisibility Network
+
+.pull-left[
+The last analysis made clear that non of the burial mounds can see each other. We already saw that two of them might be visible from the Hohenasberg. To make this even more stand out, we can use the Intervisibility Network tool.
+
+* Select the 'Intervisibility network' tool
+* Select 'Viewpoint Burial Mounds' as observer
+* Select 'Viewpoint Hohenasberg' as target
+* Select the aster_dem as DEM
+* Click on 'Run'
+
+**You need to select Viewpoint Layers as Observer and Target for this tool!**
+]
+
+.pull-right[
+![:width 48%](images/inter_vis_net_01.png)
+![](images/inter_vis_net_02.png)
+]
+---
+## Making intervisibility more obvious
+### Result
+
+The intervisibility is highlighted by lines connecting the lines of sight. You can make this stick out more using symbology.
+
+We can also use this tool specifying Observer and Target points the same, calculating intervisibility within one set of points.
+
+.center[
+![:width 48%](images/inter_vis_net_03.png)
+]
+---
+## Visibility Index
+### aka Total Viewshed
+
+.pull-left[
+- Essentially a cumulative viewshed for every pixel 
+- Used to find very exposed places in the landscape
+- calculation is rather time consuming
+]
+.pull-right[
+![](images/20-05-01-visibility-index.jpg)
+.caption[Example of a total viewshed/Visibility index for two river valleys: note high exposition of valley bottoms. Source: https://landscapearchaeology.org]
+]
+---
+## Visibility Index
+### Calculation
+
+.pull-left[
+* Select the 'Visibility Index' tool
+* Select the aster_dem as DEM
+* You can specify how far each raster cell should 'see'
+  * higher values mean more calculation time
+* You can specify observers height
+* You can specify observation directions
+  * more means more calculation time, but more precise results
+* You can specify if to see (Incoming) or to be seen (Outgoing)
+* Click on 'Run'
+]
+
+.pull-right[
+![:width 48%](images/vis_index01.png)
+![](images/vis_index02.png)
+]
+
+---
+## Visibility Index
+### Result
+
+The result shows prominent locations in the landscape
+
+Note that the Hohenasberg is rather prominent and can be seen from many places.
+
+On the other hand, the burial mounds are not that prominent...
+
+.center[
+![:width 48%](images/vis_index03.png) ![:width 48%](images/vis_index04.png)
+.caption[Results of the Visibility index calculation. Left: original result; Right: restyled using Symbology. More yellow-red means more visible]
+]
+---
+## Challenges
+
+Visibility analysis is complex. Wheatley and Gillings (2000) classify the issues relating to visibility analysis into three categories:
+* Pragmatic - pragmatic issues are those which apply to both GIS and non-GIS based visibility studies
+  * e.g. vegetation, human perception and temporal changes
+* Procedural – procedural issues refer to concerns that arise as a product of using GIS for visibility analysis
+  * e.g. DEM accuracy and the undifferentiated nature of the viewshed (binary output)
+* Theoretical – theoretical issues are those which arise from debates in the humanities (e.g. geography)
+
+---
+## More on Visibility analysis
+
+.pull-left[
+Axel Posluschny, Sehen und gesehen werden – Sichtbarkeitsanalysen als Werkzeug archäologischer Forschungen. In:
+D. Krausse (Hrsg.), Frühe Zentralisierungs- und Urbanisierungsprozesse. Zur Genese und Entwicklung frühkeltischer Fürstensitze und ihres territorialen Umlandes. Forsch. u. Ber. Vor- u. Frühgesch. Baden-Württemberg 101 (Stuttgart 2008) 367–380, 2008
+
+Free available via academia.edu
+
+Also: https://landscapearchaeology.org of Zoran Čučković, the maker of the QGIS Plugin
+]
+
+.pull-right[
+![:width 90%](images/posluschny_2008.png)
+]
+
+---
+
+# Homework
+
+* Get a DEM of a location of your choice
+  (tip: make it not too big! And have it in projected coordinate/meter based)
+* Make a vector point layer with one position in the landscape
+* Make a viewpoint layer from it
+* Calculate a viewshed from it
+* Send me a screenshot of the result
+
+---
+class: inverse, middle, center
+# Any questions?
+
+![:width 20%](images/Sad-topographies-5a8d19e473177__605.jpg)
+
+.caption[Source: https://www.instagram.com/sadtopographies]
+
+.footnote[
+.right[
+.tiny[
+You might find the course material (including the presentations) at
+
+https://github.com/MartinHinz/gia_hs_2020
+
+You can see the rendered presentations at
+
+http://martinhinz.github.io/gia_hs_2020
+
+You can contact me at
+
+&lt;a href="mailto:martin.hinz@iaw.unibe.ch"&gt;martin.hinz@iaw.unibe.ch&lt;/a&gt;
+]
+]
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../libs/remark-latest.min.js"></script>
+<script src="../libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"fig_caption": true,
+"ratio": "16:10"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
